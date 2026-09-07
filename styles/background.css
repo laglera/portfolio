@@ -1,0 +1,220 @@
+/* ------------------------------------------------------------------
+   Codex-style background
+   Mesh gradient orgánico (azul saturado → violeta → lavanda) con una
+   banda de luz difusa en diagonal, blob violeta arriba a la derecha
+   y textura de grano.
+
+   Uso:
+     <div class="codex-bg" aria-hidden="true">
+       <div class="codex-bg__light"></div>
+       <div class="codex-bg__blob"></div>
+       <div class="codex-bg__grain"></div>
+     </div>
+------------------------------------------------------------------ */
+
+.codex-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  isolation: isolate;
+  background: #4a63ee;
+}
+
+.codex-bg > * {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* --- Capa 1: mesh base ------------------------------------------ */
+.codex-bg::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background:
+    /* franja azul saturada del borde superior izquierdo */
+    radial-gradient(46% 30% at 8% -8%,    #3a5ff5 0%, rgba(58, 95, 245, 0) 100%),
+    radial-gradient(30% 44% at -6% 26%,   #4a6df6 0%, rgba(74, 109, 246, 0) 100%),
+    radial-gradient(34% 46% at -4% 78%,   #5d7bf3 0%, rgba(93, 123, 243, 0) 100%),
+    /* azul cielo alrededor de la zona de luz */
+    radial-gradient(26% 34% at 22% 18%,   #8ab4f9 0%, rgba(138, 180, 249, 0) 100%),
+    radial-gradient(24% 30% at 14% 60%,   #97bcf8 0%, rgba(151, 188, 248, 0) 100%),
+    radial-gradient(20% 26% at 30% 92%,   #9fb6f6 0%, rgba(159, 182, 246, 0) 100%),
+    /* violeta del tercio derecho */
+    radial-gradient(40% 50% at 80% 44%,   #8b7cf2 0%, rgba(139, 124, 242, 0) 100%),
+    /* lavanda claro: mitad inferior derecha y esquina superior derecha */
+    radial-gradient(66% 66% at 106% 106%, #e2d8fc 0%, rgba(226, 216, 252, 0.62) 40%, rgba(226, 216, 252, 0) 100%),
+    radial-gradient(30% 36% at 102% 52%,  #c5b7f9 0%, rgba(197, 183, 249, 0) 100%),
+    radial-gradient(22% 26% at 100% 0%,   #bdaef7 0%, rgba(189, 174, 247, 0) 100%),
+    /* violeta medio inferior centro */
+    radial-gradient(44% 36% at 56% 110%,  #9d97f6 0%, rgba(157, 151, 246, 0) 100%),
+    linear-gradient(110deg, #4666f3 0%, #6a80f4 30%, #8483f2 55%, #a99cf5 78%, #cdc0f9 100%);
+  filter: blur(48px);
+  transform: scale(1.06);
+  animation: codex-drift-a 36s ease-in-out infinite alternate;
+}
+
+/* --- Capa 2: banda de luz difusa en diagonal --------------------- */
+.codex-bg__light {
+  inset: -30%;
+  background:
+    radial-gradient(ellipse 17% 52% at 37% 42%, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.45) 38%, rgba(255, 255, 255, 0) 70%),
+    radial-gradient(ellipse 12% 30% at 45% 10%, rgba(255, 255, 255, 0.68) 0%, rgba(255, 255, 255, 0) 70%),
+    radial-gradient(ellipse 11% 24% at 30% 72%, rgba(230, 239, 255, 0.55) 0%, rgba(230, 239, 255, 0) 74%),
+    radial-gradient(ellipse 8% 15% at 41% 56%, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 76%);
+  filter: blur(42px);
+  transform: rotate(-10deg) scale(1.08);
+  animation: codex-drift-b 44s ease-in-out infinite alternate;
+}
+
+/* --- Capa 3: blob violeta superior derecho ----------------------- */
+.codex-bg__blob {
+  inset: 0;
+  background:
+    radial-gradient(ellipse 20% 30% at 68% 4%,  rgba(80, 62, 202, 0.78) 0%, rgba(80, 62, 202, 0.4) 45%, rgba(86, 68, 205, 0) 78%),
+    radial-gradient(ellipse 15% 20% at 80% 2%,  rgba(98, 78, 218, 0.66) 0%, rgba(104, 84, 220, 0) 78%),
+    radial-gradient(ellipse 13% 16% at 55% 0%,  rgba(116, 98, 230, 0.58) 0%, rgba(122, 104, 232, 0) 80%),
+    radial-gradient(ellipse 11% 15% at 74% 22%, rgba(112, 94, 226, 0.46) 0%, rgba(118, 100, 228, 0) 82%);
+  filter: blur(56px);
+  animation: codex-drift-c 40s ease-in-out infinite alternate;
+}
+
+/* --- Capa 4: grano ---------------------------------------------- */
+.codex-bg__grain {
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  opacity: 0.6;
+  mix-blend-mode: soft-light;
+}
+
+/* Segundo pase de grano, más fino y contrastado */
+.codex-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23m)'/%3E%3C/svg%3E");
+  background-size: 130px 130px;
+  opacity: 0.22;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+/* --- Movimiento -------------------------------------------------- */
+@keyframes codex-drift-a {
+  from { transform: scale(1.06) translate3d(0, 0, 0); }
+  to   { transform: scale(1.12) translate3d(-2%, 1.2%, 0); }
+}
+@keyframes codex-drift-b {
+  from { transform: rotate(-10deg) scale(1.08) translate3d(0, 0, 0); }
+  to   { transform: rotate(-6deg)  scale(1.16) translate3d(3%, -2%, 0); }
+}
+@keyframes codex-drift-c {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(-2.5%, 1.5%, 0) scale(1.08); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .codex-bg::before,
+  .codex-bg__light,
+  .codex-bg__blob { animation: none; }
+}
+
+/* ------------------------------------------------------------------
+   Campo ASCII que sigue al cursor (scripts/cursor-ascii.js)
+------------------------------------------------------------------ */
+
+.bg-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  pointer-events: none;
+  /* Tapa el degradado CSS, que queda debajo como respaldo sin WebGL. */
+}
+
+.ascii-field {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  pointer-events: none;
+  /* El tamaño en px lo fija el script: un <canvas> es un elemento
+     reemplazado y con inset:0 caería a su tamaño intrínseco (300x150). */
+}
+
+/* ------------------------------------------------------------------
+   Botón de cambio de tema
+------------------------------------------------------------------ */
+
+.theme-toggle {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 2;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #1a1a3a;
+
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease,
+              color 0.25s ease, transform 0.15s ease;
+}
+
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.28);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.theme-toggle:active { transform: scale(0.94); }
+
+.theme-toggle:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 2px;
+}
+
+.theme-toggle svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* Sale el icono del modo al que se va a cambiar, no el actual. */
+.theme-toggle .icon-moon { display: none; }
+[data-theme="dark"] .theme-toggle .icon-moon { display: block; }
+[data-theme="dark"] .theme-toggle .icon-sun { display: none; }
+
+[data-theme="dark"] .theme-toggle {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.1);
+  color: #e8e6ff;
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle { transition: none; }
+}
+
+/* Respaldo sin WebGL: variante oscura del degradado CSS. */
+[data-theme="dark"] .codex-bg { background: #0d1240; }
+
+[data-theme="dark"] .codex-bg::before {
+  filter: blur(48px) brightness(0.32) saturate(1.15);
+}
+
+[data-theme="dark"] .codex-bg__light { opacity: 0.35; }
+[data-theme="dark"] .codex-bg__blob { opacity: 0.75; }

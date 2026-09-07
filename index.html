@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Background</title>
+  <link rel="stylesheet" href="styles/background.css" />
+  <style>
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; background: #000; }
+    /* Marco negro + esquinas redondeadas, como en la referencia */
+    .stage { position: relative; min-height: 100vh; padding: 8px; background: #000; }
+    .stage__inner {
+      position: relative;
+      min-height: calc(100vh - 16px);
+      border-radius: 18px;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    /* Dentro del marco el background es absoluto, no fixed */
+    .stage__inner .codex-bg { position: absolute; z-index: 0; }
+  </style>
+  <script>
+    // Se aplica antes de pintar para que no haya un parpadeo de tema.
+    (function () {
+      let saved = null;
+      try { saved = localStorage.getItem("theme"); } catch (e) {}
+      const dark = saved
+        ? saved === "dark"
+        : window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.dataset.theme = dark ? "dark" : "light";
+    })();
+  </script>
+</head>
+<body>
+  <div class="stage">
+    <div class="stage__inner">
+      <div class="codex-bg" aria-hidden="true">
+        <div class="codex-bg__light"></div>
+        <div class="codex-bg__blob"></div>
+        <div class="codex-bg__grain"></div>
+      </div>
+      <canvas class="bg-canvas" aria-hidden="true"></canvas>
+      <canvas class="ascii-field" aria-hidden="true"></canvas>
+
+      <button
+        type="button"
+        class="theme-toggle ascii-overlay-safe"
+        aria-label="Cambiar a modo oscuro"
+        aria-pressed="false"
+      >
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.2" />
+          <path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2
+                   M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6" />
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <script src="scripts/background-gl.js"></script>
+  <script src="scripts/cursor-ascii.js"></script>
+  <script>
+    const root = document.documentElement;
+    const toggle = document.querySelector(".theme-toggle");
+
+    const bg = new CodexBackground(document.querySelector(".bg-canvas"), {
+      dark: root.dataset.theme === "dark",
+    });
+    window.__bg = bg;
+
+    let ascii = null;
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      ascii = new AsciiCursorField(document.querySelector(".ascii-field"), {
+        safeSelector: ".ascii-overlay-safe",
+      });
+      window.__asciiField = ascii;
+    }
+
+    function applyTheme(theme, instant) {
+      const dark = theme === "dark";
+      root.dataset.theme = theme;
+
+      if (bg.supported) bg.setDark(dark, instant);
+      // Sobre el fondo oscuro los caracteres necesitan algo más de cuerpo.
+      if (ascii) ascii.opts.alpha = dark ? 0.44 : 0.34;
+
+      toggle.setAttribute("aria-pressed", String(dark));
+      toggle.setAttribute("aria-label", dark ? "Cambiar a modo claro" : "Cambiar a modo oscuro");
+
+      try { localStorage.setItem("theme", theme); } catch (e) {}
+    }
+
+    applyTheme(root.dataset.theme, true);
+
+    toggle.addEventListener("click", () => {
+      applyTheme(root.dataset.theme === "dark" ? "light" : "dark", false);
+    });
+  </script>
+</body>
+</html>
