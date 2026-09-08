@@ -26,13 +26,19 @@
   </style>
   <script>
     // Se aplica antes de pintar para que no haya un parpadeo de tema.
+    // La preferencia guardada puede ser "light", "dark" o "system".
     (function () {
       let saved = null;
       try { saved = localStorage.getItem("theme"); } catch (e) {}
-      const dark = saved
-        ? saved === "dark"
-        : window.matchMedia("(prefers-color-scheme: dark)").matches;
+      if (saved !== "light" && saved !== "dark") saved = "system";
+
+      const dark =
+        saved === "system"
+          ? window.matchMedia("(prefers-color-scheme: dark)").matches
+          : saved === "dark";
+
       document.documentElement.dataset.theme = dark ? "dark" : "light";
+      document.documentElement.dataset.themePref = saved;
     })();
   </script>
 </head>
@@ -69,9 +75,40 @@
             <button class="hero__action" aria-label="Idioma" type="button">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
             </button>
-            <button class="hero__action" aria-label="Tema" type="button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-            </button>
+            <div class="theme-picker">
+              <button
+                class="hero__action theme-picker__button"
+                type="button"
+                aria-label="Tema"
+                aria-haspopup="menu"
+                aria-expanded="false"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+              </button>
+
+              <div class="theme-picker__menu" role="menu" aria-label="Tema" hidden>
+                <button type="button" role="menuitemradio" data-theme-pref="light" aria-checked="false">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="4.2" />
+                    <path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6" />
+                  </svg>
+                  <span>Claro</span>
+                </button>
+                <button type="button" role="menuitemradio" data-theme-pref="dark" aria-checked="false">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z" />
+                  </svg>
+                  <span>Oscuro</span>
+                </button>
+                <button type="button" role="menuitemradio" data-theme-pref="system" aria-checked="false">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="4" width="18" height="13" rx="2" />
+                    <path d="M8 21h8M12 17v4" />
+                  </svg>
+                  <span>Sistema</span>
+                </button>
+              </div>
+            </div>
           </div>
         </header>
 
@@ -84,7 +121,7 @@
         </p>
 
         <p>
-          De forma autodidacta, me gusta estudiar sobre Big Data y Machine Learning.
+          De manera autodidacta, me gusta aprender sobre Big Data y Machine Learning.
         </p>
 
         <p>
@@ -187,23 +224,6 @@
         </ul>
       </section>
 
-      <button
-        type="button"
-        class="theme-toggle ascii-overlay-safe"
-        aria-label="Cambiar a modo oscuro"
-        aria-pressed="false"
-      >
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="4.2" />
-          <path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2
-                   M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6" />
-        </svg>
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z" />
-        </svg>
-      </button>
     </div>
   </div>
 
@@ -301,7 +321,6 @@
   <script src="scripts/projects.js"></script>
   <script>
     const root = document.documentElement;
-    const toggle = document.querySelector(".theme-toggle");
 
     const bg = new CodexBackground(document.querySelector(".bg-canvas"), {
       dark: root.dataset.theme === "dark",
@@ -316,6 +335,22 @@
       window.__asciiField = ascii;
     }
 
+    /* --- tema: claro / oscuro / el del sistema ---------------------- */
+
+    const picker = document.querySelector(".theme-picker");
+    const pickerButton = picker.querySelector(".theme-picker__button");
+    const pickerMenu = picker.querySelector(".theme-picker__menu");
+    const options = Array.from(pickerMenu.querySelectorAll("[data-theme-pref]"));
+    const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+
+    // Qué prefiere el visitante; puede ser "system".
+    let pref = root.dataset.themePref || "system";
+
+    function resolve(p) {
+      if (p === "light" || p === "dark") return p;
+      return systemDark.matches ? "dark" : "light";
+    }
+
     function applyTheme(theme, instant) {
       const dark = theme === "dark";
       root.dataset.theme = theme;
@@ -323,18 +358,83 @@
       if (bg.supported) bg.setDark(dark, instant);
       // Sobre el fondo oscuro los caracteres necesitan algo más de cuerpo.
       if (ascii) ascii.opts.alpha = dark ? 0.44 : 0.34;
-
-      toggle.setAttribute("aria-pressed", String(dark));
-      toggle.setAttribute("aria-label", dark ? "Cambiar a modo claro" : "Cambiar a modo oscuro");
-
-      try { localStorage.setItem("theme", theme); } catch (e) {}
     }
 
-    applyTheme(root.dataset.theme, true);
+    function setPref(next, instant) {
+      pref = next;
+      root.dataset.themePref = next;
 
-    toggle.addEventListener("click", () => {
-      applyTheme(root.dataset.theme === "dark" ? "light" : "dark", false);
+      options.forEach((option) => {
+        option.setAttribute("aria-checked", String(option.dataset.themePref === next));
+      });
+
+      applyTheme(resolve(next), instant);
+
+      try { localStorage.setItem("theme", next); } catch (e) {}
+    }
+
+    // Con "sistema" activo, seguir al vuelo los cambios del SO.
+    systemDark.addEventListener("change", () => {
+      if (pref === "system") applyTheme(resolve(pref), false);
     });
+
+    /* --- desplegable ----------------------------------------------- */
+
+    function openMenu() {
+      pickerMenu.hidden = false;
+      pickerButton.setAttribute("aria-expanded", "true");
+      const checked = options.find((o) => o.getAttribute("aria-checked") === "true");
+      (checked || options[0]).focus();
+    }
+
+    function closeMenu(refocus) {
+      if (pickerMenu.hidden) return;
+      pickerMenu.hidden = true;
+      pickerButton.setAttribute("aria-expanded", "false");
+      if (refocus) pickerButton.focus();
+    }
+
+    pickerButton.addEventListener("click", () => {
+      if (pickerMenu.hidden) openMenu();
+      else closeMenu(true);
+    });
+
+    pickerMenu.addEventListener("click", (event) => {
+      const option = event.target.closest("[data-theme-pref]");
+      if (!option) return;
+      setPref(option.dataset.themePref, false);
+      closeMenu(true);
+    });
+
+    // Flechas para recorrer el menú, Esc para salir.
+    picker.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !pickerMenu.hidden) {
+        event.preventDefault();
+        closeMenu(true);
+        return;
+      }
+      if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+      if (pickerMenu.hidden) {
+        event.preventDefault();
+        openMenu();
+        return;
+      }
+      const i = options.indexOf(document.activeElement);
+      if (i === -1) return;
+      event.preventDefault();
+      const step = event.key === "ArrowDown" ? 1 : -1;
+      options[(i + step + options.length) % options.length].focus();
+    });
+
+    document.addEventListener("pointerdown", (event) => {
+      if (!picker.contains(event.target)) closeMenu(false);
+    });
+
+    picker.addEventListener("focusout", (event) => {
+      if (!picker.contains(event.relatedTarget)) closeMenu(false);
+    });
+
+    setPref(pref, true);
   </script>
 </body>
 </html>
