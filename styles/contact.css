@@ -1,0 +1,345 @@
+/* ------------------------------------------------------------------
+   Modal de contacto
+   <dialog> nativo: el navegador ya nos da focus trap, cierre con ESC
+   y capa superior por encima del canvas del fondo.
+------------------------------------------------------------------ */
+
+.contact-dialog {
+  --c-bg: #fbfbfa;
+  --c-fg: #111;
+  --c-muted: #6b6b6b;
+  --c-border: rgba(0, 0, 0, 0.12);
+  --c-field-bg: #fff;
+  --c-field-border: rgba(0, 0, 0, 0.14);
+  --c-accent: #111;
+  --c-accent-fg: #fff;
+
+  width: min(440px, calc(100vw - 32px));
+  padding: 0;
+  border: 1px solid var(--c-border);
+  border-radius: 16px;
+  background: var(--c-bg);
+  color: var(--c-fg);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+[data-theme="dark"] .contact-dialog {
+  --c-bg: #17181a;
+  --c-fg: #ececec;
+  --c-muted: #9a9a9a;
+  --c-border: rgba(255, 255, 255, 0.12);
+  --c-field-bg: rgba(255, 255, 255, 0.04);
+  --c-field-border: rgba(255, 255, 255, 0.14);
+  --c-accent: #ececec;
+  --c-accent-fg: #17181a;
+}
+
+/* .contact-form y .contact-done usan display:grid, que gana al display:none
+   que el navegador aplica a [hidden]. Hay que forzarlo. */
+.contact-dialog [hidden] {
+  display: none !important;
+}
+
+.contact-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+}
+
+/* Animación de entrada (y de salida vía .is-closing) */
+.contact-dialog[open] {
+  animation: contact-in 0.18s ease-out;
+}
+.contact-dialog[open]::backdrop {
+  animation: contact-fade 0.18s ease-out;
+}
+.contact-dialog.is-closing {
+  animation: contact-out 0.14s ease-in forwards;
+}
+.contact-dialog.is-closing::backdrop {
+  animation: contact-fade 0.14s ease-in reverse forwards;
+}
+
+@keyframes contact-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes contact-out {
+  from { opacity: 1; transform: none; }
+  to   { opacity: 0; transform: translateY(6px) scale(0.985); }
+}
+@keyframes contact-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-dialog[open],
+  .contact-dialog[open]::backdrop,
+  .contact-dialog.is-closing,
+  .contact-dialog.is-closing::backdrop {
+    animation: none;
+  }
+}
+
+/* --- Cabecera ---------------------------------------------------- */
+
+.contact-dialog__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 22px 0;
+}
+
+.contact-dialog__title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.contact-dialog__sub {
+  margin: 4px 0 0;
+  font-size: 13.5px;
+  color: var(--c-muted);
+}
+
+.contact-dialog__close {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  margin: -4px -4px 0 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--c-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.contact-dialog__close:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--c-fg);
+}
+
+[data-theme="dark"] .contact-dialog__close:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.contact-dialog__close svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* --- Formulario -------------------------------------------------- */
+
+.contact-form {
+  padding: 18px 22px 22px;
+  display: grid;
+  gap: 14px;
+}
+
+.contact-field {
+  display: grid;
+  gap: 6px;
+}
+
+.contact-field label {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--c-muted);
+}
+
+.contact-field input,
+.contact-field textarea {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid var(--c-field-border);
+  border-radius: 9px;
+  background: var(--c-field-bg);
+  color: var(--c-fg);
+  font: inherit;
+  font-size: 14.5px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.contact-field textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.contact-field input::placeholder,
+.contact-field textarea::placeholder {
+  color: var(--c-muted);
+  opacity: 0.7;
+}
+
+.contact-field input:focus,
+.contact-field textarea:focus {
+  outline: none;
+  border-color: var(--c-fg);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.07);
+}
+
+[data-theme="dark"] .contact-field input:focus,
+[data-theme="dark"] .contact-field textarea:focus {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.09);
+}
+
+/* El mensaje de validación sólo aparece tras el primer intento de envío. */
+.contact-field__error {
+  font-size: 12.5px;
+  color: #c0392b;
+  display: none;
+}
+
+[data-theme="dark"] .contact-field__error {
+  color: #ff8a7a;
+}
+
+.contact-form.was-validated .contact-field input:invalid,
+.contact-form.was-validated .contact-field textarea:invalid {
+  border-color: #c0392b;
+}
+
+.contact-form.was-validated .contact-field input:invalid ~ .contact-field__error,
+.contact-form.was-validated .contact-field textarea:invalid ~ .contact-field__error {
+  display: block;
+}
+
+/* Honeypot anti-bots: fuera de la vista pero sin display:none. */
+.contact-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* --- Acciones ---------------------------------------------------- */
+
+.contact-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.contact-btn {
+  padding: 9px 16px;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.contact-btn--ghost {
+  background: transparent;
+  border-color: var(--c-field-border);
+  color: var(--c-fg);
+}
+
+.contact-btn--ghost:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .contact-btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.contact-btn--primary {
+  background: var(--c-accent);
+  color: var(--c-accent-fg);
+}
+
+.contact-btn--primary:hover {
+  opacity: 0.86;
+}
+
+.contact-dialog__note {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--c-muted);
+}
+
+.contact-dialog__note a,
+.contact-done a {
+  color: var(--c-fg);
+  text-decoration: none;
+  border-bottom: 1px solid var(--c-field-border);
+}
+
+.contact-dialog__note a:hover,
+.contact-done a:hover {
+  border-bottom-color: var(--c-fg);
+}
+
+/* --- Confirmación posterior al envío ------------------------------ */
+
+.contact-done {
+  padding: 26px 22px 24px;
+  text-align: center;
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+}
+
+.contact-done__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.06);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[data-theme="dark"] .contact-done__icon {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.contact-done__icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.contact-done p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--c-muted);
+  max-width: 300px;
+}
+
+.contact-done strong {
+  color: var(--c-fg);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.contact-done .contact-btn {
+  margin-top: 6px;
+}
+
+@media (max-width: 560px) {
+  .contact-dialog {
+    font-size: 14.5px;
+  }
+  .contact-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+  .contact-btn {
+    width: 100%;
+  }
+}

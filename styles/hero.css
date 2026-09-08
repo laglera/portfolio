@@ -1,0 +1,178 @@
+.hero {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 72px 32px 96px;
+  color: var(--hero-fg, #111);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+[data-theme="dark"] .hero {
+  --hero-fg: #e8e8e8;
+  --hero-muted: #a0a0a0;
+  --hero-link: #f0f0f0;
+  --hero-underline: rgba(240, 240, 240, 0.35);
+  --hero-icon-bg: rgba(255, 255, 255, 0.06);
+  --hero-icon-fg: #d0d0d0;
+  --hero-icon-border: rgba(255, 255, 255, 0.08);
+}
+
+.hero {
+  --hero-fg: #111;
+  --hero-muted: #6b6b6b;
+  --hero-link: #111;
+  --hero-underline: rgba(0, 0, 0, 0.35);
+  --hero-icon-bg: rgba(0, 0, 0, 0.04);
+  --hero-icon-fg: #444;
+  --hero-icon-border: rgba(0, 0, 0, 0.08);
+}
+
+.hero__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.hero__identity {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.hero__avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d9c7a7, #8a6b47);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.hero__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__name {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0;
+  color: var(--hero-fg);
+}
+
+.hero__role {
+  font-size: 14px;
+  color: var(--hero-muted);
+  margin-top: 2px;
+}
+
+.hero__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.hero__action {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--hero-icon-bg);
+  border: 1px solid var(--hero-icon-border);
+  color: var(--hero-icon-fg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.hero__action:hover {
+  background: rgba(0, 0, 0, 0.08);
+  color: var(--hero-fg);
+}
+
+[data-theme="dark"] .hero__action:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.hero__action svg {
+  width: 16px;
+  height: 16px;
+}
+
+.hero p {
+  margin: 0 0 20px;
+}
+
+.hero p:last-child {
+  margin-bottom: 0;
+}
+
+.hero a {
+  color: var(--hero-link);
+  text-decoration: none;
+  border-bottom: 1px solid var(--hero-underline);
+  padding-bottom: 1px;
+  font-weight: 500;
+  transition: border-color 0.15s ease;
+}
+
+.hero a:hover {
+  border-bottom-color: var(--hero-link);
+}
+
+.hero .inline-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #333;
+  color: #fff;
+  font-size: 10px;
+  vertical-align: -3px;
+  margin: 0 2px;
+}
+
+.hero .flag {
+  display: inline-block;
+  vertical-align: -2px;
+  margin: 0 2px;
+  font-size: 15px;
+}
+
+@media (max-width: 560px) {
+  .hero {
+    padding: 48px 20px 64px;
+    font-size: 15px;
+  }
+  .hero__name {
+    font-size: 16px;
+  }
+  .hero__role {
+    font-size: 13px;
+  }
+}
+
+.hero .inline-logo {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  object-fit: cover;
+  object-position: left center;
+  border-radius: 4px;
+  vertical-align: -3px;
+  margin: 0 2px;
+}
