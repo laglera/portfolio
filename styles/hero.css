@@ -197,22 +197,21 @@
 
 .theme-picker__menu {
   position: absolute;
-  top: calc(100% + 6px);
+  top: calc(100% + 5px);
   right: 0;
   z-index: 10;
 
-  min-width: 152px;
-  padding: 4px;
+  min-width: 118px;
+  padding: 3px;
   display: flex;
   flex-direction: column;
-  gap: 1px;
 
   border: 1px solid var(--menu-border, rgba(0, 0, 0, 0.1));
-  border-radius: 11px;
+  border-radius: 9px;
   background: var(--menu-bg, rgba(255, 255, 255, 0.86));
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
 }
 
 [data-theme="dark"] .theme-picker__menu {
@@ -229,15 +228,16 @@
 .theme-picker__menu button {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 7px;
   width: 100%;
-  padding: 7px 9px;
+  padding: 5px 7px;
   border: 0;
-  border-radius: 8px;
+  border-radius: 6px;
   background: transparent;
   color: var(--hero-fg);
   font: inherit;
-  font-size: 13.5px;
+  font-size: 12.5px;
+  line-height: 1.3;
   text-align: left;
   cursor: pointer;
   transition: background 0.12s ease;
@@ -257,8 +257,8 @@
 }
 
 .theme-picker__menu svg {
-  width: 15px;
-  height: 15px;
+  width: 13px;
+  height: 13px;
   flex-shrink: 0;
   color: var(--hero-muted);
 }
@@ -270,8 +270,8 @@
 /* Marca de la opción activa: un punto, sin desplazar el texto. */
 .theme-picker__menu button::after {
   content: "";
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
   background: transparent;
   flex-shrink: 0;

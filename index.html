@@ -11,17 +11,16 @@
   <style>
     * { box-sizing: border-box; }
     html, body { height: 100%; }
-    body { margin: 0; background: #000; }
-    /* Marco negro + esquinas redondeadas, como en la referencia */
-    .stage { position: relative; min-height: 100vh; padding: 8px; background: #000; }
+    body { margin: 0; }
+    /* El fondo va a sangre: sin marco ni esquinas redondeadas. */
+    .stage { position: relative; min-height: 100vh; }
     .stage__inner {
       position: relative;
-      min-height: calc(100vh - 16px);
-      border-radius: 18px;
+      min-height: 100vh;
       overflow: hidden;
       isolation: isolate;
     }
-    /* Dentro del marco el background es absoluto, no fixed */
+    /* Dentro del stage el background es absoluto, no fixed */
     .stage__inner .codex-bg { position: absolute; z-index: 0; }
   </style>
   <script>
