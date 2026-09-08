@@ -13,7 +13,30 @@
   if (!section) return;
 
   const grid = section.querySelector(".projects__grid");
-  const ETIQUETAS = { web: "Web", ios: "iOS", escritorio: "Escritorio" };
+  const ETIQUETAS = {
+    es: { web: "Web", ios: "iOS", escritorio: "Escritorio" },
+    en: { web: "Web", ios: "iOS", escritorio: "Desktop" },
+  };
+
+  const idioma = () => (window.i18n ? window.i18n.lang : "es");
+  const t = (clave, fallback) => (window.i18n ? window.i18n.t(clave) : fallback);
+
+  // Título y resumen tienen versión inglesa en data-*-en.
+  function campo(card, nombre) {
+    const en = card.dataset[nombre + "En"];
+    return idioma() === "en" && en ? en : card.dataset[nombre] || "";
+  }
+
+  // El nombre del proyecto sólo existe para lectores de pantalla.
+  function etiquetarCasillas() {
+    grid.querySelectorAll(".project").forEach(function (card) {
+      const box = card.querySelector(".project__box");
+      if (box) box.setAttribute("aria-label", t("projects.open", "Ver detalles de") + " " + campo(card, "title"));
+    });
+  }
+
+  etiquetarCasillas();
+  document.addEventListener("langchange", etiquetarCasillas);
 
   const dialog = document.querySelector(".project-dialog");
   if (!dialog || typeof dialog.showModal !== "function") return;
@@ -29,18 +52,22 @@
   function fill(card) {
     const d = card.dataset;
 
-    elTitle.textContent = d.title || "Proyecto";
+    const titulo = campo(card, "title");
+    const resumen = campo(card, "summary");
+    const etiquetas = ETIQUETAS[idioma()] || ETIQUETAS.es;
+
+    elTitle.textContent = titulo || "Proyecto";
 
     const tags = (d.tags || "")
       .split(/\s+/)
       .filter(Boolean)
-      .map(function (t) {
-        return ETIQUETAS[t] || t;
+      .map(function (tag) {
+        return etiquetas[tag] || tag;
       });
     elTags.textContent = [d.year, tags.join(" · ")].filter(Boolean).join(" — ");
 
-    elSummary.textContent = d.summary || "";
-    elSummary.hidden = !d.summary;
+    elSummary.textContent = resumen;
+    elSummary.hidden = !resumen;
 
     elStack.textContent = "";
     (d.stack || "")
@@ -57,12 +84,12 @@
 
     // Los enlaces sólo aparecen si el proyecto los tiene.
     elActions.textContent = "";
-    if (d.url) elActions.appendChild(link(d.url, "Ver proyecto", true));
-    if (d.repo) elActions.appendChild(link(d.repo, "Codigo", false));
+    if (d.url) elActions.appendChild(link(d.url, t("project.view", "Ver proyecto"), true));
+    if (d.repo) elActions.appendChild(link(d.repo, t("project.code", "Codigo"), false));
 
     const cerrar = document.createElement("button");
     cerrar.type = "button";
-    cerrar.textContent = "Cerrar";
+    cerrar.textContent = t("project.close", "Cerrar");
     cerrar.setAttribute("data-project-close", "");
     elActions.appendChild(cerrar);
   }

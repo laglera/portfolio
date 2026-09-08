@@ -123,7 +123,10 @@
       "mailto:" +
       CONTACT_EMAIL +
       "?subject=" +
-      encodeURIComponent(subject || "Contacto desde el portfolio") +
+      encodeURIComponent(
+        subject ||
+          (window.i18n ? window.i18n.t("contact.mail.subject") : "Contacto desde el portfolio")
+      ) +
       "&body=" +
       encodeURIComponent(body);
 
