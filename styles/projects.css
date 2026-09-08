@@ -1,0 +1,335 @@
+/* ------------------------------------------------------------------
+   Sección de proyectos
+   Cabecera con filtros por plataforma + rejilla de tarjetas. Cada
+   tarjeta lleva su icono asomando por la esquina superior izquierda.
+------------------------------------------------------------------ */
+
+.projects {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 32px 96px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+
+  --p-fg: #111;
+  --p-muted: #6b6b6b;
+  --p-card: rgba(255, 255, 255, 0.55);
+  --p-border: rgba(0, 0, 0, 0.1);
+  --p-card-hover: rgba(255, 255, 255, 0.72);
+  --p-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+
+  color: var(--p-fg);
+}
+
+[data-theme="dark"] .projects {
+  --p-fg: #e8e8e8;
+  --p-muted: #a0a0a0;
+  --p-card: rgba(255, 255, 255, 0.07);
+  --p-border: rgba(255, 255, 255, 0.12);
+  --p-card-hover: rgba(255, 255, 255, 0.12);
+  --p-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Cabecera ---------------------------------------------------- */
+
+.projects__head {
+  margin-bottom: 28px;
+}
+
+.projects__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--p-fg);
+}
+
+/* --- Rejilla ----------------------------------------------------- */
+
+.projects__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 34px 22px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.project {
+  position: relative;
+  margin: 0;
+}
+
+/* La casilla: un boton con forma de tarjeta, sin contenido visible.
+   El nombre del proyecto vive en los data-* del <li> y sale en el
+   dialogo al pulsarla. */
+.project__box {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  padding: 0;
+  border-radius: 12px;
+  border: 1px solid var(--p-border);
+  background: var(--p-card);
+  box-shadow: var(--p-shadow);
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.project__box:hover {
+  transform: translateY(-3px);
+  background: var(--p-card-hover);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+}
+
+.project__box:focus-visible {
+  outline: 2px solid var(--p-fg);
+  outline-offset: 3px;
+}
+
+/* Texto sólo para lectores de pantalla. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Oculto por el filtro activo: .project es un <li>, con display propio. */
+.projects__grid .project[hidden] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project__box {
+    transition: none;
+  }
+  .project__box:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .projects__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .projects {
+    padding: 0 20px 64px;
+  }
+  .projects__grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Diálogo de detalle del proyecto
+------------------------------------------------------------------ */
+
+.project-dialog {
+  --d-bg: #fbfbfa;
+  --d-fg: #111;
+  --d-muted: #6b6b6b;
+  --d-border: rgba(0, 0, 0, 0.12);
+  --d-chip: rgba(0, 0, 0, 0.05);
+
+  width: min(480px, calc(100vw - 32px));
+  padding: 0;
+  border: 1px solid var(--d-border);
+  border-radius: 16px;
+  background: var(--d-bg);
+  color: var(--d-fg);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+[data-theme="dark"] .project-dialog {
+  --d-bg: #17181a;
+  --d-fg: #ececec;
+  --d-muted: #9a9a9a;
+  --d-border: rgba(255, 255, 255, 0.12);
+  --d-chip: rgba(255, 255, 255, 0.08);
+}
+
+.project-dialog:focus {
+  outline: none;
+}
+
+.project-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+}
+
+.project-dialog[open] {
+  animation: project-in 0.18s ease-out;
+}
+.project-dialog[open]::backdrop {
+  animation: project-fade 0.18s ease-out;
+}
+.project-dialog.is-closing {
+  animation: project-out 0.14s ease-in forwards;
+}
+.project-dialog.is-closing::backdrop {
+  animation: project-fade 0.14s ease-in reverse forwards;
+}
+
+@keyframes project-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes project-out {
+  from { opacity: 1; transform: none; }
+  to   { opacity: 0; transform: translateY(6px) scale(0.985); }
+}
+@keyframes project-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-dialog[open],
+  .project-dialog[open]::backdrop,
+  .project-dialog.is-closing,
+  .project-dialog.is-closing::backdrop {
+    animation: none;
+  }
+}
+
+.project-dialog__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 22px 0;
+}
+
+.project-dialog__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.project-dialog__tags {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--d-muted);
+}
+
+.project-dialog__close {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  margin: -4px -4px 0 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--d-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.project-dialog__close:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--d-fg);
+}
+
+[data-theme="dark"] .project-dialog__close:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.project-dialog__close svg {
+  width: 15px;
+  height: 15px;
+}
+
+.project-dialog__body {
+  padding: 14px 22px 0;
+}
+
+.project-dialog__summary {
+  margin: 0;
+  font-size: 14.5px;
+  color: var(--d-fg);
+}
+
+.project-dialog__stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project-dialog__stack:empty {
+  display: none;
+}
+
+.project-dialog__stack li {
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--d-chip);
+  font-size: 12.5px;
+  color: var(--d-muted);
+}
+
+.project-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 20px 22px 22px;
+}
+
+.project-dialog__actions a,
+.project-dialog__actions button {
+  padding: 8px 15px;
+  border-radius: 9px;
+  border: 1px solid var(--d-border);
+  background: transparent;
+  color: var(--d-fg);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+.project-dialog__actions a:hover,
+.project-dialog__actions button:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .project-dialog__actions a:hover,
+[data-theme="dark"] .project-dialog__actions button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.project-dialog__actions .is-primary {
+  background: var(--d-fg);
+  border-color: var(--d-fg);
+  color: var(--d-bg);
+}
+
+.project-dialog__actions .is-primary:hover {
+  background: var(--d-fg);
+  opacity: 0.86;
+}

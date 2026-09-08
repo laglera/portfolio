@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Background</title>
+  <title>Portfolio de Alejandro Laglera</title>
   <link rel="stylesheet" href="styles/background.css" />
   <link rel="stylesheet" href="styles/hero.css" />
+  <link rel="stylesheet" href="styles/projects.css" />
   <link rel="stylesheet" href="styles/contact.css" />
   <style>
     * { box-sizing: border-box; }
@@ -78,12 +79,12 @@
 
         <p>
           Estudiante de Analisis Economico en <img class="inline-logo" src="assets/upo-logo.png" alt="Universidad Pablo de Olavide" width="18" height="18" /> <a href="#">UPO</a>, Construyo mis propios
-          <span class="inline-icon">★</span> <a href="#">proyectos</a> en mi tiempo libre y me dedico
+          <span class="inline-icon">★</span> <a href="#proyectos">proyectos</a> en mi tiempo libre y me dedico
           a mis otros  <span class="inline-icon">🌊</span> <a href="#">hobbies</a>.
         </p>
 
         <p>
-          De forma autodidacta, me gusta estudiar sobre Big Data y Machine Learning
+          De forma autodidacta, me gusta estudiar sobre Big Data y Machine Learning.
         </p>
 
         <p>
@@ -91,6 +92,99 @@
           <span class="inline-icon">✉</span> <a href="#contacto" data-contact-open>email</a>,
           o buscandome en <span class="inline-icon">G</span> <a href="#">GitHub</a>.
         </p>
+      </section>
+
+      <section class="projects ascii-overlay-safe" id="proyectos">
+        <div class="projects__head">
+          <h2 class="projects__title">Proyectos.</h2>
+        </div>
+
+        <ul class="projects__grid">
+          <li
+            class="project"
+            data-tags="web"
+            data-year="2026"
+            data-title="Portfolio 2.0"
+            data-summary="Mi sitio personal. Fondo generado con WebGL, overlay ASCII que reacciona al puntero y modo claro/oscuro persistente. Sin frameworks: HTML, CSS y JavaScript a pelo."
+            data-stack="JavaScript, WebGL, Canvas, CSS"
+            data-url=""
+            data-repo=""
+          >
+            <button type="button" class="project__box" aria-haspopup="dialog">
+              <span class="sr-only">Ver detalles de Portfolio 2.0</span>
+            </button>
+          </li>
+          <li
+            class="project"
+            data-tags="web"
+            data-year="2025"
+            data-title="Analisis Bursatil"
+            data-summary="Panel para explorar series historicas de cotizaciones: descarga de datos, indicadores y comparativa entre valores. Nacio como practica de la carrera y acabo siendo una herramienta que uso."
+            data-stack="Python, pandas, Plotly"
+            data-url=""
+            data-repo=""
+          >
+            <button type="button" class="project__box" aria-haspopup="dialog">
+              <span class="sr-only">Ver detalles de Analisis Bursatil</span>
+            </button>
+          </li>
+          <li
+            class="project"
+            data-tags="ios"
+            data-year="2025"
+            data-title="Tracker de Habitos"
+            data-summary="App para registrar habitos diarios con rachas y recordatorios. Todo en local, sin cuenta ni servidor."
+            data-stack="Swift, SwiftUI, Core Data"
+            data-url=""
+            data-repo=""
+          >
+            <button type="button" class="project__box" aria-haspopup="dialog">
+              <span class="sr-only">Ver detalles de Tracker de Habitos</span>
+            </button>
+          </li>
+          <li
+            class="project"
+            data-tags="escritorio"
+            data-year="2024"
+            data-title="Dashboard Economico"
+            data-summary="Cuadro de mando de indicadores macroeconomicos con actualizacion automatica desde fuentes publicas y exportacion a informe."
+            data-stack="Python, DuckDB, Streamlit"
+            data-url=""
+            data-repo=""
+          >
+            <button type="button" class="project__box" aria-haspopup="dialog">
+              <span class="sr-only">Ver detalles de Dashboard Economico</span>
+            </button>
+          </li>
+          <li
+            class="project"
+            data-tags="escritorio"
+            data-year="2024"
+            data-title="Scraper de Datos"
+            data-summary="Extractor configurable de datos web con reintentos, limite de peticiones y volcado a CSV o base de datos. Lo uso para alimentar el resto de proyectos."
+            data-stack="Python, httpx, BeautifulSoup"
+            data-url=""
+            data-repo=""
+          >
+            <button type="button" class="project__box" aria-haspopup="dialog">
+              <span class="sr-only">Ver detalles de Scraper de Datos</span>
+            </button>
+          </li>
+          <li
+            class="project"
+            data-tags="web ios"
+            data-year="2023"
+            data-title="Notas ML"
+            data-summary="Coleccion de apuntes sobre machine learning con ejemplos ejecutables. Empezo como cuaderno personal mientras estudiaba por mi cuenta."
+            data-stack="Jupyter, scikit-learn, MkDocs"
+            data-url=""
+            data-repo=""
+          >
+            <button type="button" class="project__box" aria-haspopup="dialog">
+              <span class="sr-only">Ver detalles de Notas ML</span>
+            </button>
+          </li>
+        </ul>
       </section>
 
       <button
@@ -179,9 +273,32 @@
     </div>
   </dialog>
 
+
+  <dialog class="project-dialog" tabindex="-1" aria-labelledby="proyecto-titulo">
+    <div class="project-dialog__head">
+      <div>
+        <h2 class="project-dialog__title" id="proyecto-titulo"></h2>
+        <p class="project-dialog__tags"></p>
+      </div>
+      <button type="button" class="project-dialog__close" data-project-close aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="project-dialog__body">
+      <p class="project-dialog__summary"></p>
+      <ul class="project-dialog__stack"></ul>
+    </div>
+
+    <div class="project-dialog__actions"></div>
+  </dialog>
+
   <script src="scripts/background-gl.js"></script>
   <script src="scripts/cursor-ascii.js"></script>
   <script src="scripts/contact.js"></script>
+  <script src="scripts/projects.js"></script>
   <script>
     const root = document.documentElement;
     const toggle = document.querySelector(".theme-toggle");
