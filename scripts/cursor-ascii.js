@@ -38,7 +38,12 @@ class AsciiCursorField {
           { min: 0.0, chars: ["-", "_"] },
         ],
         jitter: 0.2,        // irregularidad del borde del halo
-        safeSelector: null, // zonas donde no dibujar (textos, botones)
+        safeSelector: null, // zonas a proteger (textos, botones)
+        // Sobre esas zonas el efecto no se corta: sigue pasando por
+        // detrás con esta fracción de la opacidad, para no competir
+        // con el texto pero mantener el halo continuo.
+        safeFade: 0.5,
+        safePad: 2,         // margen alrededor de cada línea de texto
       },
       options
     );
@@ -128,30 +133,76 @@ class AsciiCursorField {
     this._collectSafeRects();
   }
 
-  // Rectángulos protegidos: el overlay no dibuja sobre ellos.
+  /* Rectángulos protegidos.
+
+     Se miden por línea de texto, no por bloque: el rect de un <section>
+     de 720px taparía media pantalla y partiría el halo en seco. Con las
+     cajas reales de cada línea el efecto sigue corriendo por los
+     márgenes y por el interlineado. */
   _collectSafeRects() {
     if (!this.opts.safeSelector) {
       this.safeRects = [];
       return;
     }
+
     const canvasRect = this.canvas.getBoundingClientRect();
-    this.safeRects = Array.from(document.querySelectorAll(this.opts.safeSelector))
-      .map((el) => {
-        const r = el.getBoundingClientRect();
-        return {
-          left: r.left - canvasRect.left - 6,
-          top: r.top - canvasRect.top - 4,
-          right: r.right - canvasRect.left + 6,
-          bottom: r.bottom - canvasRect.top + 4,
-        };
-      })
-      .filter((r) => r.right > 0 && r.bottom > 0 && r.left < this.width && r.top < this.height);
+    const pad = this.opts.safePad;
+    const rects = [];
+
+    const push = (r) => {
+      if (!r || r.width <= 0 || r.height <= 0) return;
+      rects.push({
+        left: r.left - canvasRect.left - pad,
+        top: r.top - canvasRect.top - pad,
+        right: r.right - canvasRect.left + pad,
+        bottom: r.bottom - canvasRect.top + pad,
+      });
+    };
+
+    // Elementos sin texto propio (iconos, botones): van enteros.
+    const ATOMIC = "img, svg, canvas, video, input, textarea, select, button";
+
+    for (const el of document.querySelectorAll(this.opts.safeSelector)) {
+      const before = rects.length;
+
+      for (const node of el.querySelectorAll(ATOMIC)) push(node.getBoundingClientRect());
+      if (el.matches(ATOMIC)) push(el.getBoundingClientRect());
+
+      // Una caja por línea renderizada de cada nodo de texto.
+      const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+        acceptNode: (node) =>
+          node.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT,
+      });
+      const range = document.createRange();
+      let node;
+      while ((node = walker.nextNode())) {
+        range.selectNodeContents(node);
+        for (const r of range.getClientRects()) push(r);
+      }
+
+      // Sin texto ni elementos atómicos: se protege el bloque entero.
+      if (rects.length === before) push(el.getBoundingClientRect());
+    }
+
+    this.safeRects = rects.filter(
+      (r) => r.right > 0 && r.bottom > 0 && r.left < this.width && r.top < this.height
+    );
   }
 
-  _isSafe(x, y) {
+  // Los rects que cruzan una fila de la rejilla. Filtrar una vez por
+  // fila evita recorrer las ~40 cajas de línea en cada celda.
+  _rectsForRow(y) {
+    const out = [];
     for (let i = 0; i < this.safeRects.length; i++) {
       const r = this.safeRects[i];
-      if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) return true;
+      if (y >= r.top && y <= r.bottom) out.push(r);
+    }
+    return out;
+  }
+
+  _isSafeIn(rects, x) {
+    for (let i = 0; i < rects.length; i++) {
+      if (x >= rects[i].left && x <= rects[i].right) return true;
     }
     return false;
   }
@@ -262,17 +313,22 @@ class AsciiCursorField {
   }
 
   _tick() {
-    const { cellW, cellH, alpha, color, lifetime } = this.opts;
+    const { cellW, cellH, alpha, color, lifetime, safeFade } = this.opts;
     const ctx = this.ctx;
     const now = performance.now();
 
     ctx.clearRect(0, 0, this.width, this.height);
-    ctx.fillStyle = `rgba(${color}, ${alpha})`;
+
+    const full = `rgba(${color}, ${alpha})`;
+    const dimmed = `rgba(${color}, ${alpha * safeFade})`;
+    ctx.fillStyle = full;
+    let dim = false; // fillStyle sólo se toca al cambiar de zona
 
     let alive = 0;
 
     for (let r = 0; r < this.rows; r++) {
       const y = r * cellH + cellH / 2;
+      const rowRects = this.safeRects.length ? this._rectsForRow(y) : null;
       for (let c = 0; c < this.cols; c++) {
         const index = r * this.cols + c;
         const until = this.grid[index];
@@ -281,7 +337,13 @@ class AsciiCursorField {
         alive++;
 
         const x = c * cellW + cellW / 2;
-        if (this.safeRects.length && this._isSafe(x, y)) continue;
+
+        // Sobre el texto el halo no se interrumpe, sólo pierde fuerza.
+        const safe = rowRects !== null && rowRects.length > 0 && this._isSafeIn(rowRects, x);
+        if (safe !== dim) {
+          dim = safe;
+          ctx.fillStyle = safe ? dimmed : full;
+        }
 
         // Energía restante: decide qué carácter toca ahora.
         const energy = (until - now) / lifetime;
