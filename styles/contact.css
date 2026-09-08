@@ -51,25 +51,25 @@
 
 /* Animación de entrada (y de salida vía .is-closing) */
 .contact-dialog[open] {
-  animation: contact-in 0.18s ease-out;
+  animation: contact-in 0.32s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .contact-dialog[open]::backdrop {
-  animation: contact-fade 0.18s ease-out;
+  animation: contact-fade 0.28s ease-out;
 }
 .contact-dialog.is-closing {
-  animation: contact-out 0.14s ease-in forwards;
+  animation: contact-out 0.18s ease-in forwards;
 }
 .contact-dialog.is-closing::backdrop {
-  animation: contact-fade 0.14s ease-in reverse forwards;
+  animation: contact-fade 0.18s ease-in reverse forwards;
 }
 
 @keyframes contact-in {
-  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  from { opacity: 0; transform: translateY(18px) scale(0.94); }
   to   { opacity: 1; transform: none; }
 }
 @keyframes contact-out {
   from { opacity: 1; transform: none; }
-  to   { opacity: 0; transform: translateY(6px) scale(0.985); }
+  to   { opacity: 0; transform: translateY(10px) scale(0.97); }
 }
 @keyframes contact-fade {
   from { opacity: 0; }

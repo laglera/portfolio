@@ -175,25 +175,25 @@
 }
 
 .project-dialog[open] {
-  animation: project-in 0.18s ease-out;
+  animation: project-in 0.32s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .project-dialog[open]::backdrop {
-  animation: project-fade 0.18s ease-out;
+  animation: project-fade 0.28s ease-out;
 }
 .project-dialog.is-closing {
-  animation: project-out 0.14s ease-in forwards;
+  animation: project-out 0.18s ease-in forwards;
 }
 .project-dialog.is-closing::backdrop {
-  animation: project-fade 0.14s ease-in reverse forwards;
+  animation: project-fade 0.18s ease-in reverse forwards;
 }
 
 @keyframes project-in {
-  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  from { opacity: 0; transform: translateY(18px) scale(0.94); }
   to   { opacity: 1; transform: none; }
 }
 @keyframes project-out {
   from { opacity: 1; transform: none; }
-  to   { opacity: 0; transform: translateY(6px) scale(0.985); }
+  to   { opacity: 0; transform: translateY(10px) scale(0.97); }
 }
 @keyframes project-fade {
   from { opacity: 0; }
