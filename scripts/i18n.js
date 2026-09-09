@@ -40,6 +40,14 @@
       "hero.open.email": "email",
       "hero.open.2": ", o buscándome en",
 
+      "stack.title": "Stack tecnológico.",
+      "stack.sub": "Lo que uso a diario, entre la carrera y lo que construyo por mi cuenta.",
+      "stack.languages": "Lenguajes",
+      "stack.frameworks": "Frameworks",
+      "stack.data": "Datos y ML",
+      "stack.platforms": "Plataformas",
+      "stack.tools": "Herramientas",
+
       "projects.title": "Proyectos.",
       "projects.open": "Ver detalles de",
       "project.view": "Ver proyecto",
@@ -95,6 +103,14 @@
       "hero.open.1": "I am open to new opportunities, feel free to reach me by",
       "hero.open.email": "email",
       "hero.open.2": ", or find me on",
+
+      "stack.title": "Tech stack.",
+      "stack.sub": "What I use day to day, between university and what I build on my own.",
+      "stack.languages": "Languages",
+      "stack.frameworks": "Frameworks",
+      "stack.data": "Data & ML",
+      "stack.platforms": "Platforms",
+      "stack.tools": "Tools",
 
       "projects.title": "Projects.",
       "projects.open": "See details of",
