@@ -1,0 +1,212 @@
+/* ------------------------------------------------------------------
+   Sección de Hobbies / Feed personal
+   Estructura de huecos / slots vacíos en 3 columnas asimétricas,
+   reproduciendo la disposición y proporciones de la imagen.
+------------------------------------------------------------------ */
+
+.hobbies {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 32px 96px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+
+  --h-fg: #111;
+  --h-muted: #6b6b6b;
+  --h-slot-bg: rgba(255, 255, 255, 0.45);
+  --h-slot-border: rgba(0, 0, 0, 0.08);
+  --h-slot-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  --h-slot-hover-border: rgba(0, 0, 0, 0.16);
+  --h-slot-hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --h-btn-bg: rgba(0, 0, 0, 0.05);
+  --h-btn-hover: rgba(0, 0, 0, 0.09);
+  --h-btn-border: rgba(0, 0, 0, 0.08);
+  --h-btn-fg: #333;
+
+  color: var(--h-fg);
+}
+
+[data-theme="dark"] .hobbies {
+  --h-fg: #e8e8e8;
+  --h-muted: #a0a0a0;
+  --h-slot-bg: rgba(255, 255, 255, 0.05);
+  --h-slot-border: rgba(255, 255, 255, 0.1);
+  --h-slot-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  --h-slot-hover-border: rgba(255, 255, 255, 0.2);
+  --h-slot-hover-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
+  --h-btn-bg: rgba(255, 255, 255, 0.08);
+  --h-btn-hover: rgba(255, 255, 255, 0.14);
+  --h-btn-border: rgba(255, 255, 255, 0.12);
+  --h-btn-fg: #eee;
+}
+
+/* --- Cabecera ---------------------------------------------------- */
+
+.hobbies__head {
+  margin-bottom: 26px;
+}
+
+.hobbies__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--h-fg);
+}
+
+/* --- Rejilla ----------------------------------------------------- */
+
+.hobbies__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.hobbies__col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hobbies__col:nth-child(2) {
+  height: 100%;
+}
+
+/* --- Huecos / Slots --------------------------------------------- */
+
+.hobbies__slot {
+  width: 100%;
+  border-radius: 24px;
+  background: var(--h-slot-bg);
+  border: 1px solid var(--h-slot-border);
+  box-shadow: var(--h-slot-shadow);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.hobbies__slot:hover {
+  transform: translateY(-3px);
+  border-color: var(--h-slot-hover-border);
+  box-shadow: var(--h-slot-hover-shadow);
+}
+
+/* Proporciones de cada hueco según la imagen de referencia */
+.hobbies__slot--1 {
+  aspect-ratio: 212 / 324;
+}
+
+.hobbies__slot--2 {
+  aspect-ratio: 216 / 286;
+}
+
+.hobbies__slot--3 {
+  aspect-ratio: 216 / 272;
+}
+
+.hobbies__slot--4 {
+  aspect-ratio: 216 / 164;
+}
+
+.hobbies__slot--5 {
+  aspect-ratio: 216 / 286;
+}
+
+.hobbies__slot--6 {
+  aspect-ratio: 216 / 286;
+}
+
+/* --- Botón "View all" -------------------------------------------- */
+
+.hobbies__action-box {
+  margin-top: auto;
+  padding: 32px 0 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.hobbies__view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 20px;
+  background: var(--h-btn-bg);
+  color: var(--h-btn-fg);
+  border: 1px solid var(--h-btn-border);
+  border-radius: 9999px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.hobbies__view-all:hover {
+  background: var(--h-btn-hover);
+  transform: translateY(-1.5px);
+  border-color: rgba(0, 0, 0, 0.16);
+}
+
+[data-theme="dark"] .hobbies__view-all:hover {
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.hobbies__view-all:active {
+  transform: translateY(0);
+}
+
+.hobbies__arrow {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hobbies__view-all:hover .hobbies__arrow {
+  transform: translateX(3px);
+}
+
+/* --- Responsividad ----------------------------------------------- */
+
+@media (max-width: 680px) {
+  .hobbies {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .hobbies__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .hobbies__col {
+    gap: 14px;
+  }
+
+  .hobbies__col:nth-child(3) {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hobbies__action-box {
+    grid-column: 1 / -1;
+    padding-top: 16px;
+  }
+}
+
+@media (max-width: 440px) {
+  .hobbies__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hobbies__col:nth-child(3) {
+    grid-template-columns: 1fr;
+  }
+}

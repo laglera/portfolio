@@ -48,6 +48,9 @@
       "stack.platforms": "Plataformas",
       "stack.tools": "Herramientas",
 
+      "hobbies.title": "My feed.",
+      "hobbies.viewAll": "View all",
+
       "projects.title": "Proyectos.",
       "projects.open": "Ver detalles de",
       "project.view": "Ver proyecto",
@@ -111,6 +114,9 @@
       "stack.data": "Data & ML",
       "stack.platforms": "Platforms",
       "stack.tools": "Tools",
+
+      "hobbies.title": "My feed.",
+      "hobbies.viewAll": "View all",
 
       "projects.title": "Projects.",
       "projects.open": "See details of",
