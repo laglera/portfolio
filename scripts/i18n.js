@@ -48,7 +48,7 @@
       "stack.platforms": "Plataformas",
       "stack.tools": "Herramientas",
 
-      "hobbies.title": "My feed.",
+      "hobbies.title": "Hobbies.",
       "hobbies.viewAll": "View all",
 
       "projects.title": "Proyectos.",
@@ -115,7 +115,7 @@
       "stack.platforms": "Platforms",
       "stack.tools": "Tools",
 
-      "hobbies.title": "My feed.",
+      "hobbies.title": "Hobbies.",
       "hobbies.viewAll": "View all",
 
       "projects.title": "Projects.",
