@@ -1,0 +1,6 @@
+# macOS
+.DS_Store
+
+# Capturas y grabaciones de trabajo (no forman parte del sitio)
+/Captura de pantalla*.png
+/Grabación de pantalla*.mov
