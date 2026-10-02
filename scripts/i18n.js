@@ -16,7 +16,6 @@
   const TEXTOS = {
     es: {
       "hero.role": "Programador",
-      "hero.search": "Buscar",
       "hero.language": "Idioma",
       "hero.theme": "Tema",
 
@@ -81,7 +80,6 @@
 
     en: {
       "hero.role": "Developer",
-      "hero.search": "Search",
       "hero.language": "Language",
       "hero.theme": "Theme",
 
@@ -169,7 +167,7 @@
       el.textContent = t(el.dataset.i18n);
     });
 
-    // data-i18n-attr="aria-label:hero.search, placeholder:contact.name.ph"
+    // data-i18n-attr="aria-label:hero.language, placeholder:contact.name.ph"
     document.querySelectorAll("[data-i18n-attr]").forEach(function (el) {
       el.dataset.i18nAttr.split(",").forEach(function (par) {
         const trozos = par.split(":");
