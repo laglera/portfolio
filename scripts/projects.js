@@ -35,12 +35,29 @@
     });
   }
 
+  // Si el proyecto tiene data-image, la casilla la enseña. Es decorativa:
+  // el nombre ya va en el aria-label del botón.
+  grid.querySelectorAll(".project").forEach(function (card) {
+    const box = card.querySelector(".project__box");
+    if (!box || !card.dataset.image) return;
+    const img = document.createElement("img");
+    img.src = card.dataset.image;
+    img.alt = "";
+    img.loading = "lazy";
+    img.decoding = "async";
+    box.appendChild(img);
+    box.classList.add("has-image");
+    if (card.dataset.bg) box.style.setProperty("--project-bg", card.dataset.bg);
+    if (card.dataset.fx) box.classList.add("fx-" + card.dataset.fx);
+  });
+
   etiquetarCasillas();
   document.addEventListener("langchange", etiquetarCasillas);
 
   const dialog = document.querySelector(".project-dialog");
   if (!dialog || typeof dialog.showModal !== "function") return;
 
+  const elImage = dialog.querySelector(".project-dialog__image");
   const elTitle = dialog.querySelector(".project-dialog__title");
   const elTags = dialog.querySelector(".project-dialog__tags");
   const elSummary = dialog.querySelector(".project-dialog__summary");
@@ -57,6 +74,14 @@
     const etiquetas = ETIQUETAS[idioma()] || ETIQUETAS.es;
 
     elTitle.textContent = titulo || "Proyecto";
+
+    if (elImage) {
+      if (d.image) elImage.src = d.image;
+      else elImage.removeAttribute("src");
+      elImage.hidden = !d.image;
+      if (d.bg) elImage.style.setProperty("--project-bg", d.bg);
+      else elImage.style.removeProperty("--project-bg");
+    }
 
     const tags = (d.tags || "")
       .split(/\s+/)

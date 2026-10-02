@@ -79,6 +79,84 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
+/* Imagen del proyecto (data-image): contenida y con aire, para que un
+   logo con fondo transparente no toque los bordes. */
+.project__box.has-image {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  overflow: hidden;
+  background: var(--project-bg, var(--p-card));
+  /* El borde oscuro del tema claro se ve como una línea negra sobre un
+     fondo de color; uno claro funciona igual en los dos temas. */
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+/* Brillo de cristal en la parte de arriba de la casilla. */
+.project__box.has-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), transparent 45%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+  pointer-events: none;
+}
+
+.project__box.has-image:hover {
+  background: var(--project-bg, var(--p-card-hover));
+}
+
+.project__box img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 8px 12px rgba(10, 40, 80, 0.3));
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project__box:hover img {
+  transform: translateY(-3px) scale(1.04);
+}
+
+/* data-fx="bubbles": burbujas que suben por el fondo y la imagen
+   flotando. Cada capa de burbujas tiene un tamaño de mosaico distinto,
+   así que con la misma duración suben a velocidades distintas. El
+   flotar usa `translate` para no pisar el `transform` del hover. */
+.project__box.fx-bubbles::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image:
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.55) 0 2px, transparent 3px),
+    radial-gradient(circle at 70% 40%, rgba(255, 255, 255, 0.4) 0 3px, transparent 4px),
+    radial-gradient(circle at 45% 15%, rgba(255, 255, 255, 0.35) 0 1.5px, transparent 2.5px);
+  background-size: 90px 120px, 130px 170px, 70px 100px;
+  animation: project-bubbles 8s linear infinite;
+  pointer-events: none;
+}
+
+.project__box.fx-bubbles img {
+  animation: project-float 4.5s ease-in-out infinite;
+}
+
+@keyframes project-bubbles {
+  from { background-position: 0 0, 0 0, 0 0; }
+  to   { background-position: 0 -120px, 0 -170px, 0 -100px; }
+}
+
+@keyframes project-float {
+  0%, 100% { translate: 0 2px; }
+  50%      { translate: 0 -3px; }
+}
+
 .project__box:hover {
   transform: translateY(-3px);
   background: var(--p-card-hover);
@@ -112,8 +190,13 @@
   .project__box {
     transition: none;
   }
-  .project__box:hover {
+  .project__box:hover,
+  .project__box:hover img {
     transform: none;
+  }
+  .project__box.fx-bubbles::before,
+  .project__box.fx-bubbles img {
+    animation: none;
   }
 }
 
@@ -207,6 +290,24 @@
   .project-dialog.is-closing::backdrop {
     animation: none;
   }
+}
+
+/* Franja de cabecera con la imagen sobre el fondo del proyecto. */
+.project-dialog__image {
+  display: block;
+  width: 100%;
+  height: 180px;
+  padding: 20px;
+  box-sizing: border-box;
+  object-fit: contain;
+  background: var(--project-bg, var(--d-chip));
+  border-bottom: 1px solid var(--d-border);
+  /* El diálogo no recorta su contenido: las esquinas van aquí. */
+  border-radius: 15px 15px 0 0;
+}
+
+.project-dialog__image[hidden] {
+  display: none;
 }
 
 .project-dialog__head {
@@ -329,7 +430,10 @@
   color: var(--d-bg);
 }
 
-.project-dialog__actions .is-primary:hover {
+/* El selector del tema oscuro va también aquí: si no, su hover genérico
+   (más específico) le quita el fondo y el texto se pierde. */
+.project-dialog__actions .is-primary:hover,
+[data-theme="dark"] .project-dialog__actions .is-primary:hover {
   background: var(--d-fg);
   opacity: 0.86;
 }

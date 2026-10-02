@@ -162,15 +162,18 @@
         <ul class="projects__grid">
           <li
             class="project"
-            data-tags=""
-            data-year=""
-            data-title=""
-            data-summary=""
-            data-title-en=""
-            data-summary-en=""
-            data-stack=""
-            data-url=""
-            data-repo=""
+            data-tags="web"
+            data-year="2026"
+            data-title="TheWhaleFiles"
+            data-summary="Plataforma para seguir las carteras que declaran los congresistas de EE. UU. (STOCK Act) y los directivos de empresas cotizadas (Form 4 de la SEC). Ingiere los filings cada seis horas, valora las posiciones a precio de mercado y simula qué habría pasado al copiar a cada persona desde que su operación se hizo pública, con rentabilidad y riesgo frente al S&amp;P 500. Muestra solo lo declarado, sin interpretar intenciones. Tiene API pública, CSV, feed Atom y está en español e inglés."
+            data-title-en="TheWhaleFiles"
+            data-summary-en="A platform to follow the portfolios disclosed by US members of Congress (STOCK Act) and by executives of listed companies (SEC Form 4). It ingests new filings every six hours, values holdings at market prices and simulates what copying each person would have returned from the moment their trade became public, with return and risk metrics against the S&amp;P 500. It shows only what was disclosed and does not read intent. It has a public API, CSV export, an Atom feed, and is available in Spanish and English."
+            data-stack="Python, FastAPI, PostgreSQL, GitHub Actions, Vercel"
+            data-url="https://the-whale-files.vercel.app/"
+            data-repo="https://github.com/laglera/TheWhaleFiles"
+            data-image="images/projects/thewhalefiles.png"
+            data-fx="bubbles"
+            data-bg="radial-gradient(120% 90% at 25% 10%, #f2f9ff 0%, transparent 55%), linear-gradient(170deg, #b4dbfa 0%, #5d9ad8 70%, #3f77b8 100%)"
           >
             <button type="button" class="project__box" aria-haspopup="dialog"></button>
           </li>
@@ -419,6 +422,7 @@
 
 
   <dialog class="project-dialog" tabindex="-1" aria-labelledby="proyecto-titulo">
+    <img class="project-dialog__image" alt="" hidden />
     <div class="project-dialog__head">
       <div>
         <h2 class="project-dialog__title" id="proyecto-titulo"></h2>
