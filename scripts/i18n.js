@@ -15,7 +15,7 @@
 
   const TEXTOS = {
     es: {
-      "hero.role": "Programador y estudiante",
+      "hero.role": "Programador",
       "hero.search": "Buscar",
       "hero.language": "Idioma",
       "hero.theme": "Tema",
@@ -29,9 +29,7 @@
 
       "hero.age": "22 años, viviendo en",
       "hero.country": "España",
-      "hero.studies.1": "Estudiante de Análisis Económico en",
-      "hero.studies.upo": "UPO",
-      "hero.studies.2": ", construyo mis propios",
+      "hero.studies.2": "Construyo mis propios",
       "hero.studies.projects": "proyectos",
       "hero.studies.3": "en mi tiempo libre y me dedico a mis otros",
       "hero.studies.hobbies": "hobbies",
@@ -82,7 +80,7 @@
     },
 
     en: {
-      "hero.role": "Developer and student",
+      "hero.role": "Developer",
       "hero.search": "Search",
       "hero.language": "Language",
       "hero.theme": "Theme",
@@ -96,9 +94,7 @@
 
       "hero.age": "22 years old, living in",
       "hero.country": "Spain",
-      "hero.studies.1": "Economic Analysis student at",
-      "hero.studies.upo": "UPO",
-      "hero.studies.2": ", I build my own",
+      "hero.studies.2": "I build my own",
       "hero.studies.projects": "projects",
       "hero.studies.3": "in my free time and spend the rest on my other",
       "hero.studies.hobbies": "hobbies",
