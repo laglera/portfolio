@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 42 42" width="160" height="160">
+  <defs>
+    <g id="sello">
+      <g fill="#ffffff" stroke="#2b1745" stroke-width="2.6" stroke-linejoin="round">
+        <rect x="-5.6" y="-5.6" width="11.2" height="11.2" rx="1.6" />
+        <rect x="-5.6" y="-5.6" width="11.2" height="11.2" rx="1.6" transform="rotate(45)" />
+        <g stroke="none">
+          <rect x="-5.6" y="-5.6" width="11.2" height="11.2" rx="1.6" />
+          <rect x="-5.6" y="-5.6" width="11.2" height="11.2" rx="1.6" transform="rotate(45)" />
+        </g>
+      </g>
+    </g>
+  </defs>
+  <use href="#sello" transform="translate(20 9)" />
+  <use href="#sello" transform="translate(9 20)" />
+  <use href="#sello" transform="translate(31 20)" />
+  <use href="#sello" transform="translate(20 31)" />
+</svg>

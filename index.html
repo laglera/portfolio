@@ -199,15 +199,20 @@
           </li>
           <li
             class="project"
-            data-tags=""
-            data-year=""
-            data-title=""
-            data-summary=""
-            data-title-en=""
-            data-summary-en=""
-            data-stack=""
-            data-url=""
-            data-repo=""
+            data-tags="web"
+            data-year="2026"
+            data-title="Kaizu"
+            data-summary="App de hábitos y agenda en una sola pantalla. Las tareas de cada día se dan por hechas con evidencia real (un toque, una nota, una foto o un vídeo), y además se pueden agendar tareas sueltas para un día concreto. Arriba, el último año pintado como el resumen de contribuciones de GitHub; debajo, las tareas de hoy y el calendario del mes, todo en paneles de cristal sobre escenas ilustradas. Cada día se cierra a las 04:00 de la zona horaria de cada usuario y pasa al historial. Se instala en el móvil como app desde el navegador, funciona sin red y permite entrar con Google, descargar los datos o borrar la cuenta. Sin puntos, rachas ni pagos."
+            data-title-en="Kaizu"
+            data-summary-en="A habits and agenda app on a single screen. Each day's tasks are checked off with real evidence (a tap, a note, a photo or a video), and one-off tasks can be scheduled for a specific day. At the top, the last year painted like GitHub's contribution graph; below, today's tasks and the month's calendar, all in glass panels over illustrated scenes. Each day closes at 04:00 in the user's own time zone and moves into the history. It installs on the phone as an app straight from the browser, works offline, and supports Google sign-in, data export and account deletion. No points, streaks or payments."
+            data-status="Desplegada en planes gratuitos: aún sin almacenamiento para subir fotos ni envío de correos."
+            data-status-en="Deployed on free tiers: no storage for photo uploads or outgoing email yet."
+            data-stack="Next.js, React, TypeScript, Tailwind CSS, Python, FastAPI, PostgreSQL, PWA"
+            data-url="https://kaizuapp.vercel.app/"
+            data-repo="https://github.com/laglera/Kaizu-App"
+            data-image="images/projects/kaizu.svg"
+            data-fx="clouds"
+            data-bg="radial-gradient(120% 90% at 25% 10%, #eaf4ff 0%, transparent 55%), linear-gradient(170deg, #8fc3f5 0%, #3a7be0 70%, #1f4fb8 100%)"
           >
             <button type="button" class="project__box" aria-haspopup="dialog"></button>
           </li>
@@ -340,12 +345,12 @@
             <div class="hobbies__slot hobbies__slot--3"></div>
             <div class="hobbies__slot hobbies__slot--4"></div>
             <div class="hobbies__action-box">
-              <button type="button" class="hobbies__view-all" data-hobbies-view-all>
-                <span data-i18n="hobbies.viewAll">View all</span>
+              <a href="hobbies.html" class="hobbies__view-all">
+                <span data-i18n="hobbies.viewAll">Ver más</span>
                 <svg class="hobbies__arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M3 8h10M9 4l4 4-4 4"/>
                 </svg>
-              </button>
+              </a>
             </div>
           </div>
 
@@ -452,12 +457,15 @@
     <div class="project-dialog__actions"></div>
   </dialog>
 
+
   <script src="scripts/picker.js"></script>
   <script src="scripts/i18n.js"></script>
   <script src="scripts/background-gl.js"></script>
   <script src="scripts/cursor-ascii.js"></script>
   <script src="scripts/contact.js"></script>
   <script src="scripts/projects.js"></script>
+  <script src="scripts/hobbies-data.js"></script>
+  <script src="scripts/hobbies.js"></script>
   <script src="scripts/stack.js"></script>
   <script>
     const root = document.documentElement;

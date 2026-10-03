@@ -186,6 +186,32 @@
   60%, 100% { background-position: -50% 0; }
 }
 
+/* data-fx="clouds": nubes que cruzan la casilla de izquierda a derecha.
+   Dos capas con mosaicos de ancho distinto, así que con la misma
+   duración la de delante va más rápida, y la imagen flota. */
+.project__box.fx-clouds::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image:
+    radial-gradient(ellipse 34px 12px at 30% 30%, rgba(255, 255, 255, 0.55), transparent 70%),
+    radial-gradient(ellipse 22px 9px at 42% 26%, rgba(255, 255, 255, 0.5), transparent 70%),
+    radial-gradient(ellipse 48px 16px at 70% 78%, rgba(255, 255, 255, 0.35), transparent 70%);
+  background-size: 160px 100%, 160px 100%, 240px 100%;
+  animation: project-clouds 16s linear infinite;
+  pointer-events: none;
+}
+
+.project__box.fx-clouds img {
+  animation: project-float 4.5s ease-in-out infinite;
+}
+
+@keyframes project-clouds {
+  from { background-position: 0 0, 0 0, 0 0; }
+  to   { background-position: 160px 0, 160px 0, 240px 0; }
+}
+
 .project__box:hover {
   transform: translateY(-3px);
   background: var(--p-card-hover);
@@ -226,7 +252,9 @@
   .project__box.fx-bubbles::before,
   .project__box.fx-bubbles img,
   .project__box.fx-shine::before,
-  .project__box.fx-shine img {
+  .project__box.fx-shine img,
+  .project__box.fx-clouds::before,
+  .project__box.fx-clouds img {
     animation: none;
   }
 }

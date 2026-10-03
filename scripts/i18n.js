@@ -46,7 +46,8 @@
       "stack.tools": "Herramientas",
 
       "hobbies.title": "Hobbies.",
-      "hobbies.viewAll": "View all",
+      "hobbies.viewAll": "Ver más",
+      "hobbies.back": "Volver",
 
       "projects.title": "Proyectos.",
       "projects.open": "Ver detalles de",
@@ -111,7 +112,8 @@
       "stack.tools": "Tools",
 
       "hobbies.title": "Hobbies.",
-      "hobbies.viewAll": "View all",
+      "hobbies.viewAll": "View more",
+      "hobbies.back": "Back",
 
       "projects.title": "Projects.",
       "projects.open": "See details of",

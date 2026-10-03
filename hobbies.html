@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hobbies · Laglera</title>
+  <link rel="stylesheet" href="styles/background.css" />
+  <link rel="stylesheet" href="styles/hobbies.css" />
+  <style>
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; }
+    .stage { position: relative; min-height: 100vh; }
+    .stage__inner {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .stage__inner .codex-bg { position: absolute; z-index: 0; }
+  </style>
+  <script>
+    // Mismo tema que la portada, aplicado antes de pintar.
+    (function () {
+      let saved = null;
+      try { saved = localStorage.getItem("theme"); } catch (e) {}
+      if (saved !== "light" && saved !== "dark") saved = "system";
+
+      const dark =
+        saved === "system"
+          ? window.matchMedia("(prefers-color-scheme: dark)").matches
+          : saved === "dark";
+
+      document.documentElement.dataset.theme = dark ? "dark" : "light";
+      document.documentElement.dataset.themePref = saved;
+    })();
+  </script>
+</head>
+<body>
+  <div class="stage">
+    <div class="stage__inner">
+      <div class="codex-bg" aria-hidden="true">
+        <div class="codex-bg__light"></div>
+        <div class="codex-bg__blob"></div>
+        <div class="codex-bg__grain"></div>
+      </div>
+      <canvas class="bg-canvas" aria-hidden="true"></canvas>
+      <canvas class="ascii-field" aria-hidden="true"></canvas>
+
+      <main class="hobbies hobbies--page ascii-overlay-safe">
+        <div class="hobbies__head">
+          <h1 class="hobbies__title" data-i18n="hobbies.title">Hobbies.</h1>
+          <a href="index.html#hobbies" class="hobbies__view-all">
+            <svg class="hobbies__arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4"/>
+            </svg>
+            <span data-i18n="hobbies.back">Volver</span>
+          </a>
+        </div>
+
+        <div class="hobbies__masonry"></div>
+      </main>
+    </div>
+  </div>
+
+  <script src="scripts/i18n.js"></script>
+  <script src="scripts/background-gl.js"></script>
+  <script src="scripts/cursor-ascii.js"></script>
+  <script src="scripts/hobbies-data.js"></script>
+  <script>
+    const root = document.documentElement;
+
+    const bg = new CodexBackground(document.querySelector(".bg-canvas"), {
+      dark: root.dataset.theme === "dark",
+    });
+
+    let ascii = null;
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      ascii = new AsciiCursorField(document.querySelector(".ascii-field"), {
+        safeSelector: ".ascii-overlay-safe",
+      });
+      ascii.opts.alpha = root.dataset.theme === "dark" ? 0.44 : 0.34;
+    }
+
+    // Aquí no hay selector de tema: se sigue la preferencia de la portada
+    // y, si es "sistema", los cambios del SO al vuelo.
+    const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+    systemDark.addEventListener("change", () => {
+      if (root.dataset.themePref !== "system") return;
+      const dark = systemDark.matches;
+      root.dataset.theme = dark ? "dark" : "light";
+      if (bg.supported) bg.setDark(dark, false);
+      if (ascii) ascii.opts.alpha = dark ? 0.44 : 0.34;
+    });
+
+    /* --- fotos ------------------------------------------------------ */
+
+    const HOBBIES = window.HOBBIES || [];
+    const masonry = document.querySelector(".hobbies__masonry");
+    const lang = () => (window.i18n ? window.i18n.lang : "es");
+
+    if (HOBBIES.length) {
+      HOBBIES.forEach(function (h) {
+        const card = document.createElement("div");
+        card.className = "hobbies__slot";
+        const img = document.createElement("img");
+        img.src = h.image;
+        img.alt = (lang() === "en" && h.titleEn) || h.title || "";
+        img.loading = "lazy";
+        img.decoding = "async";
+        card.appendChild(img);
+        masonry.appendChild(card);
+      });
+    } else {
+      // Sin fotos todavía: huecos vacíos como los de la portada.
+      ["212/324", "216/286", "216/164", "216/272", "216/286", "216/220"].forEach(function (ratio) {
+        const card = document.createElement("div");
+        card.className = "hobbies__slot";
+        card.style.aspectRatio = ratio;
+        masonry.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>
