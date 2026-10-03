@@ -183,18 +183,6 @@
   display: block;
 }
 
-.hobbies__caption {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 28px 14px 12px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #fff;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.55));
-}
-
 /* --- Página hobbies.html ---------------------------------------- */
 /* Mismas tarjetas que en la portada, pero en columnas tipo mosaico y
    con la altura que pida cada foto. */

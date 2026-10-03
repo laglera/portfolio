@@ -28,13 +28,6 @@
       img.loading = "lazy";
       img.decoding = "async";
       slot.appendChild(img);
-
-      if (titulo(h)) {
-        const cap = document.createElement("span");
-        cap.className = "hobbies__caption";
-        cap.textContent = titulo(h);
-        slot.appendChild(cap);
-      }
     });
   }
 
