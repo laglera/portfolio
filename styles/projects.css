@@ -372,6 +372,13 @@
   color: var(--d-fg);
 }
 
+.project-dialog__status {
+  margin: 10px 0 0;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--d-fg);
+}
+
 .project-dialog__stack {
   display: flex;
   flex-wrap: wrap;

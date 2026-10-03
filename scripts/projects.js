@@ -14,8 +14,8 @@
 
   const grid = section.querySelector(".projects__grid");
   const ETIQUETAS = {
-    es: { web: "Web", ios: "iOS", escritorio: "Escritorio" },
-    en: { web: "Web", ios: "iOS", escritorio: "Desktop" },
+    es: { web: "Web", ios: "iOS", escritorio: "Escritorio", extension: "Extensión de Chrome" },
+    en: { web: "Web", ios: "iOS", escritorio: "Desktop", extension: "Chrome extension" },
   };
 
   const idioma = () => (window.i18n ? window.i18n.lang : "es");
@@ -61,6 +61,7 @@
   const elTitle = dialog.querySelector(".project-dialog__title");
   const elTags = dialog.querySelector(".project-dialog__tags");
   const elSummary = dialog.querySelector(".project-dialog__summary");
+  const elStatus = dialog.querySelector(".project-dialog__status");
   const elStack = dialog.querySelector(".project-dialog__stack");
   const elActions = dialog.querySelector(".project-dialog__actions");
 
@@ -93,6 +94,11 @@
 
     elSummary.textContent = resumen;
     elSummary.hidden = !resumen;
+
+    // Aviso opcional (p. ej. pendiente de publicar), en su propia línea.
+    const estado = campo(card, "status");
+    elStatus.textContent = estado;
+    elStatus.hidden = !estado;
 
     elStack.textContent = "";
     (d.stack || "")

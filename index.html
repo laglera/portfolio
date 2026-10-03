@@ -182,15 +182,17 @@
           </li>
           <li
             class="project"
-            data-tags=""
-            data-year=""
-            data-title=""
-            data-summary=""
-            data-title-en=""
-            data-summary-en=""
-            data-stack=""
-            data-url=""
-            data-repo=""
+            data-tags="extension"
+            data-year="2026"
+            data-title="ToDoList"
+            data-summary="Extensión de Google Chrome con dos vistas. Un panel lateral para gestionar tareas y proyectos: cada proyecto lleva su imagen y las tareas se mueven entre ellos arrastrando, y todo se guarda entre sesiones. Y una ventana de marcadores que sustituye al desplegable estrecho de Chrome, con árbol de carpetas, vista en rejilla o lista, buscador global sin acentos ni mayúsculas, y edición, borrado y movimiento de marcadores arrastrando. Sigue el tema claro u oscuro del sistema, está traducida a seis idiomas y no pide los iconos a servidores externos, así que la lista de sitios guardados nunca sale del navegador."
+            data-title-en="ToDoList"
+            data-summary-en="A Google Chrome extension with two views. A side panel to manage tasks and projects: each project has its own image, tasks move between projects by dragging, and everything persists across sessions. And a bookmarks window that replaces Chrome's narrow dropdown, with a folder tree, grid or list view, an accent- and case-insensitive global search, and editing, deleting and moving bookmarks by drag and drop. It follows the system's light or dark theme, is translated into six languages, and never requests favicons from external servers, so the list of saved sites never leaves the browser."
+            data-status="Pendiente de publicación en la Chrome Web Store."
+            data-status-en="Pending publication on the Chrome Web Store."
+            data-stack="JavaScript, HTML, CSS, Chrome Extensions API (Manifest V3)"
+            data-image="images/projects/todolist.png"
+            data-bg="radial-gradient(120% 90% at 25% 10%, #eef3ff 0%, transparent 55%), linear-gradient(170deg, #b9ccff 0%, #5b86f5 70%, #3a63e0 100%)"
           >
             <button type="button" class="project__box" aria-haspopup="dialog"></button>
           </li>
@@ -442,6 +444,7 @@
 
     <div class="project-dialog__body">
       <p class="project-dialog__summary"></p>
+      <p class="project-dialog__status" hidden></p>
       <ul class="project-dialog__stack"></ul>
     </div>
 
