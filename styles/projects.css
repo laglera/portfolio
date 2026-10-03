@@ -158,6 +158,34 @@
   50%      { translate: 0 -3px; }
 }
 
+/* data-fx="shine": un destello de luz cruza la casilla en diagonal cada
+   pocos segundos y la imagen flota como en "bubbles". */
+.project__box.fx-shine::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 65%
+  );
+  background-size: 250% 100%;
+  background-repeat: no-repeat;
+  animation: project-shine 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.project__box.fx-shine img {
+  animation: project-float 4.5s ease-in-out infinite;
+}
+
+@keyframes project-shine {
+  0%       { background-position: 150% 0; }
+  60%, 100% { background-position: -50% 0; }
+}
+
 .project__box:hover {
   transform: translateY(-3px);
   background: var(--p-card-hover);
@@ -196,7 +224,9 @@
     transform: none;
   }
   .project__box.fx-bubbles::before,
-  .project__box.fx-bubbles img {
+  .project__box.fx-bubbles img,
+  .project__box.fx-shine::before,
+  .project__box.fx-shine img {
     animation: none;
   }
 }
