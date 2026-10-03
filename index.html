@@ -13,6 +13,9 @@
   <style>
     * { box-sizing: border-box; }
     html, body { height: 100%; }
+    /* Los enlaces del hero (#proyectos, #hobbies) bajan con suavidad. */
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     body { margin: 0; }
     /* El fondo va a sangre: sin marco ni esquinas redondeadas. */
     .stage { position: relative; min-height: 100vh; }
@@ -150,7 +153,7 @@
           <span data-i18n="hero.open.1">Estoy abierto a nuevas oportunidades, siéntete libre de contactarme por</span>
           <span class="inline-icon">✉</span>
           <a href="#contacto" data-contact-open data-i18n="hero.open.email">email</a><span data-i18n="hero.open.2">, o buscándome en</span>
-          <span class="inline-icon">G</span> <a href="#">GitHub</a>.
+          <span class="inline-icon">G</span> <a href="https://github.com/laglera" target="_blank" rel="noopener noreferrer">GitHub</a>.
         </p>
       </section>
 
@@ -402,7 +405,10 @@
         <button type="submit" class="contact-btn contact-btn--primary" data-i18n="contact.send">Enviar</button>
       </div>
 
-      <p class="contact-dialog__note" data-i18n="contact.note">Se abrirá tu cliente de correo con el mensaje listo para enviar.</p>
+      <p class="contact-dialog__note contact-dialog__note--error" role="alert" hidden>
+        <span data-i18n="contact.error">No se pudo enviar el mensaje. Vuelve a intentarlo o escríbeme a</span>
+        <a data-contact-email href="#">email</a>.
+      </p>
     </form>
 
     <div class="contact-done" hidden>
@@ -413,8 +419,7 @@
       </span>
       <strong data-i18n="contact.done">Todo listo</strong>
       <p>
-        <span data-i18n="contact.done.text">Debería haberse abierto tu cliente de correo. Si no, escríbeme a</span>
-        <a data-contact-email href="#">email</a>.
+        <span data-i18n="contact.done.text">Mensaje enviado. Te responderé lo antes posible.</span>
       </p>
       <button type="button" class="contact-btn contact-btn--ghost" data-contact-close data-i18n="contact.close">Cerrar</button>
     </div>

@@ -1,10 +1,10 @@
 /* ------------------------------------------------------------------
    Modal de contacto
 
-   Sin backend: el formulario compone un mailto: con lo que escribe el
-   visitante y lo abre en su cliente de correo. Si eso falla (webmail
-   sin protocolo registrado), la pantalla de confirmación deja el texto
-   a mano para copiarlo.
+   El formulario se envía a Web3Forms (https://web3forms.com), que reenvía
+   el mensaje al correo asociado a la access key. La key es pública por
+   diseño: solo permite enviar al buzón registrado. Si el envío falla,
+   se muestra el email para escribir a mano.
 ------------------------------------------------------------------ */
 
 (function () {
@@ -15,18 +15,26 @@
   const MAIL_HOST = "gmail.com";
   const CONTACT_EMAIL = MAIL_USER + "@" + MAIL_HOST;
 
+  const WEB3FORMS_URL = "https://api.web3forms.com/submit";
+  const WEB3FORMS_KEY = "651c1b03-1b84-49bf-838b-c5dba49a0801";
+
   const dialog = document.querySelector(".contact-dialog");
   if (!dialog || typeof dialog.showModal !== "function") return;
 
   const form = dialog.querySelector(".contact-form");
   const done = dialog.querySelector(".contact-done");
   const head = dialog.querySelector(".contact-dialog__head");
-  const doneMail = dialog.querySelector("[data-contact-email]");
+  const errorNote = dialog.querySelector(".contact-dialog__note--error");
+  const submitBtn = form.querySelector('[type="submit"]');
   const openers = document.querySelectorAll("[data-contact-open]");
 
-  if (doneMail) {
-    doneMail.textContent = CONTACT_EMAIL;
-    doneMail.href = "mailto:" + CONTACT_EMAIL;
+  dialog.querySelectorAll("[data-contact-email]").forEach(function (a) {
+    a.textContent = CONTACT_EMAIL;
+    a.href = "mailto:" + CONTACT_EMAIL;
+  });
+
+  function t(key, fallback) {
+    return window.i18n ? window.i18n.t(key) : fallback;
   }
 
   let lastFocused = null;
@@ -35,6 +43,7 @@
     form.hidden = false;
     head.hidden = false;
     done.hidden = true;
+    if (errorNote) errorNote.hidden = true;
     form.classList.remove("was-validated");
   }
 
@@ -95,8 +104,17 @@
     if (event.target === dialog) close();
   });
 
-  form.addEventListener("submit", function (event) {
+  function setSending(sending) {
+    submitBtn.disabled = sending;
+    submitBtn.textContent = sending
+      ? t("contact.sending", "Enviando...")
+      : t("contact.send", "Enviar");
+  }
+
+  form.addEventListener("submit", async function (event) {
     event.preventDefault();
+    if (submitBtn.disabled) return;
+    if (errorNote) errorNote.hidden = true;
 
     if (!form.checkValidity()) {
       form.classList.add("was-validated");
@@ -116,22 +134,34 @@
     const subject = form.elements.subject.value.trim();
     const message = form.elements.message.value.trim();
 
-    const body =
-      message + "\n\n—\n" + name + (email ? " <" + email + ">" : "");
+    const payload = {
+      access_key: WEB3FORMS_KEY,
+      subject: "[Portfolio] " + (subject || t("contact.mail.subject", "Contacto desde el portfolio")),
+      from_name: name,
+      name: name,
+      email: email,
+      message: message,
+    };
 
-    const href =
-      "mailto:" +
-      CONTACT_EMAIL +
-      "?subject=" +
-      encodeURIComponent(
-        subject ||
-          (window.i18n ? window.i18n.t("contact.mail.subject") : "Contacto desde el portfolio")
-      ) +
-      "&body=" +
-      encodeURIComponent(body);
-
-    window.location.href = href;
-    showDone();
+    setSending(true);
+    try {
+      const response = await fetch(WEB3FORMS_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json().catch(function () { return {}; });
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "HTTP " + response.status);
+      }
+      form.reset();
+      showDone();
+    } catch (error) {
+      console.error("Error al enviar el formulario:", error);
+      if (errorNote) errorNote.hidden = false;
+    } finally {
+      setSending(false);
+    }
   });
 
   function showDone() {

@@ -273,6 +273,19 @@
   color: var(--c-muted);
 }
 
+.contact-dialog__note--error {
+  color: #c0392b;
+}
+
+[data-theme="dark"] .contact-dialog__note--error {
+  color: #ff8a7a;
+}
+
+.contact-btn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
 .contact-dialog__note a,
 .contact-done a {
   color: var(--c-fg);
