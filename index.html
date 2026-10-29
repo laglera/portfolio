@@ -51,12 +51,7 @@
 <body>
   <div class="stage">
     <div class="stage__inner">
-      <div class="codex-bg" aria-hidden="true">
-        <div class="codex-bg__light"></div>
-        <div class="codex-bg__blob"></div>
-        <div class="codex-bg__grain"></div>
-      </div>
-      <canvas class="bg-canvas" aria-hidden="true"></canvas>
+      <div class="codex-bg" aria-hidden="true"></div>
       <canvas class="ascii-field" aria-hidden="true"></canvas>
 
       <section class="hero ascii-overlay-safe">
@@ -172,8 +167,6 @@
             data-url="https://the-whale-files.vercel.app/"
             data-repo="https://github.com/laglera/TheWhaleFiles"
             data-image="images/projects/thewhalefiles.png"
-            data-fx="bubbles"
-            data-bg="radial-gradient(120% 90% at 25% 10%, #f2f9ff 0%, transparent 55%), linear-gradient(170deg, #b4dbfa 0%, #5d9ad8 70%, #3f77b8 100%)"
           >
             <button type="button" class="project__box" aria-haspopup="dialog"></button>
           </li>
@@ -189,8 +182,6 @@
             data-repo="https://github.com/laglera/ToDoList-Google-Chrome-Extension"
             data-stack="JavaScript, HTML, CSS, Chrome Extensions API (Manifest V3)"
             data-image="images/projects/todolist.png"
-            data-fx="shine"
-            data-bg="radial-gradient(120% 90% at 25% 10%, #eef3ff 0%, transparent 55%), linear-gradient(170deg, #b9ccff 0%, #5b86f5 70%, #3a63e0 100%)"
           >
             <button type="button" class="project__box" aria-haspopup="dialog"></button>
           </li>
@@ -207,8 +198,6 @@
             data-url="https://kaizuapp.vercel.app/"
             data-repo="https://github.com/laglera/Kaizu-App"
             data-image="images/projects/kaizu.svg"
-            data-fx="clouds"
-            data-bg="radial-gradient(120% 90% at 25% 10%, #eaf4ff 0%, transparent 55%), linear-gradient(170deg, #8fc3f5 0%, #3a7be0 70%, #1f4fb8 100%)"
           >
             <button type="button" class="project__box" aria-haspopup="dialog"></button>
           </li>
@@ -414,7 +403,6 @@
 
   <script src="scripts/picker.js"></script>
   <script src="scripts/i18n.js"></script>
-  <script src="scripts/background-gl.js"></script>
   <script src="scripts/cursor-ascii.js"></script>
   <script src="scripts/contact.js"></script>
   <script src="scripts/projects.js"></script>
@@ -423,11 +411,6 @@
   <script src="scripts/stack.js"></script>
   <script>
     const root = document.documentElement;
-
-    const bg = new CodexBackground(document.querySelector(".bg-canvas"), {
-      dark: root.dataset.theme === "dark",
-    });
-    window.__bg = bg;
 
     let ascii = null;
     if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -449,36 +432,39 @@
       return systemDark.matches ? "dark" : "light";
     }
 
-    function applyTheme(theme, instant) {
+    function applyTheme(theme) {
       const dark = theme === "dark";
       root.dataset.theme = theme;
 
-      if (bg.supported) bg.setDark(dark, instant);
-      // Sobre el fondo oscuro los caracteres necesitan algo más de cuerpo.
-      if (ascii) ascii.opts.alpha = dark ? 0.44 : 0.34;
+      // Sobre el fondo claro los caracteres van en azul; sobre el oscuro,
+      // en blanco y con algo más de cuerpo.
+      if (ascii) {
+        ascii.opts.color = dark ? "255, 255, 255" : "74, 99, 238";
+        ascii.opts.alpha = dark ? 0.44 : 0.34;
+      }
     }
 
-    function setPref(next, instant) {
+    function setPref(next) {
       pref = next;
       root.dataset.themePref = next;
 
       themePicker.check(next);
-      applyTheme(resolve(next), instant);
+      applyTheme(resolve(next));
 
       try { localStorage.setItem("theme", next); } catch (e) {}
     }
 
     // Con "sistema" activo, seguir al vuelo los cambios del SO.
     systemDark.addEventListener("change", () => {
-      if (pref === "system") applyTheme(resolve(pref), false);
+      if (pref === "system") applyTheme(resolve(pref));
     });
 
     const themePicker = createPicker(document.querySelector(".theme-picker"), {
       attr: "data-theme-pref",
-      onSelect: (next) => setPref(next, false),
+      onSelect: (next) => setPref(next),
     });
 
-    setPref(pref, true);
+    setPref(pref);
   </script>
 </body>
 </html>

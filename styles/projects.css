@@ -16,10 +16,9 @@
 
   --p-fg: #111;
   --p-muted: #6b6b6b;
-  --p-card: rgba(255, 255, 255, 0.55);
-  --p-border: rgba(0, 0, 0, 0.1);
-  --p-card-hover: rgba(255, 255, 255, 0.72);
-  --p-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  --p-card: #f4f4f5;
+  --p-border: rgba(0, 0, 0, 0.08);
+  --p-border-hover: rgba(0, 0, 0, 0.18);
 
   color: var(--p-fg);
 }
@@ -27,10 +26,11 @@
 [data-theme="dark"] .projects {
   --p-fg: #e8e8e8;
   --p-muted: #a0a0a0;
-  --p-card: rgba(255, 255, 255, 0.07);
-  --p-border: rgba(255, 255, 255, 0.12);
-  --p-card-hover: rgba(255, 255, 255, 0.12);
-  --p-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  /* Un navy algo más claro que el fondo, opaco: el blanco translúcido
+     lo apagaba hacia un gris pizarra. */
+  --p-card: #12284f;
+  --p-border: transparent;
+  --p-border-hover: rgba(255, 255, 255, 0.18);
 }
 
 /* --- Cabecera ---------------------------------------------------- */
@@ -65,157 +65,40 @@
 
 /* La casilla: un boton con forma de tarjeta, sin contenido visible.
    El nombre del proyecto vive en los data-* del <li> y sale en el
-   dialogo al pulsarla. */
+   dialogo al pulsarla. Plana, a juego con el fondo: superficie neutra
+   y borde fino, sin sombras ni degradados. */
 .project__box {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   aspect-ratio: 16 / 10;
-  padding: 0;
+  padding: 18px;
+  overflow: hidden;
   border-radius: 12px;
   border: 1px solid var(--p-border);
   background: var(--p-card);
-  box-shadow: var(--p-shadow);
   cursor: pointer;
-  backdrop-filter: blur(6px);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
 /* Imagen del proyecto (data-image): contenida y con aire, para que un
    logo con fondo transparente no toque los bordes. */
-.project__box.has-image {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 14px;
-  overflow: hidden;
-  background: var(--project-bg, var(--p-card));
-  /* El borde oscuro del tema claro se ve como una línea negra sobre un
-     fondo de color; uno claro funciona igual en los dos temas. */
-  border-color: rgba(255, 255, 255, 0.45);
-}
-
-/* Brillo de cristal en la parte de arriba de la casilla. */
-.project__box.has-image::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), transparent 45%);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
-  pointer-events: none;
-}
-
-.project__box.has-image:hover {
-  background: var(--project-bg, var(--p-card-hover));
-}
-
 .project__box img {
-  position: relative;
-  z-index: 1;
   display: block;
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
   pointer-events: none;
-  filter: drop-shadow(0 8px 12px rgba(10, 40, 80, 0.3));
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.project__box:hover img {
-  transform: translateY(-3px) scale(1.04);
-}
-
-/* data-fx="bubbles": burbujas que suben por el fondo y la imagen
-   flotando. Cada capa de burbujas tiene un tamaño de mosaico distinto,
-   así que con la misma duración suben a velocidades distintas. El
-   flotar usa `translate` para no pisar el `transform` del hover. */
-.project__box.fx-bubbles::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background-image:
-    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.55) 0 2px, transparent 3px),
-    radial-gradient(circle at 70% 40%, rgba(255, 255, 255, 0.4) 0 3px, transparent 4px),
-    radial-gradient(circle at 45% 15%, rgba(255, 255, 255, 0.35) 0 1.5px, transparent 2.5px);
-  background-size: 90px 120px, 130px 170px, 70px 100px;
-  animation: project-bubbles 8s linear infinite;
-  pointer-events: none;
-}
-
-.project__box.fx-bubbles img {
-  animation: project-float 4.5s ease-in-out infinite;
-}
-
-@keyframes project-bubbles {
-  from { background-position: 0 0, 0 0, 0 0; }
-  to   { background-position: 0 -120px, 0 -170px, 0 -100px; }
-}
-
-@keyframes project-float {
-  0%, 100% { translate: 0 2px; }
-  50%      { translate: 0 -3px; }
-}
-
-/* data-fx="shine": un destello de luz cruza la casilla en diagonal cada
-   pocos segundos y la imagen flota como en "bubbles". */
-.project__box.fx-shine::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(
-    115deg,
-    transparent 35%,
-    rgba(255, 255, 255, 0.45) 50%,
-    transparent 65%
-  );
-  background-size: 250% 100%;
-  background-repeat: no-repeat;
-  animation: project-shine 4s ease-in-out infinite;
-  pointer-events: none;
-}
-
-.project__box.fx-shine img {
-  animation: project-float 4.5s ease-in-out infinite;
-}
-
-@keyframes project-shine {
-  0%       { background-position: 150% 0; }
-  60%, 100% { background-position: -50% 0; }
-}
-
-/* data-fx="clouds": nubes que cruzan la casilla de izquierda a derecha.
-   Dos capas con mosaicos de ancho distinto, así que con la misma
-   duración la de delante va más rápida, y la imagen flota. */
-.project__box.fx-clouds::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background-image:
-    radial-gradient(ellipse 34px 12px at 30% 30%, rgba(255, 255, 255, 0.55), transparent 70%),
-    radial-gradient(ellipse 22px 9px at 42% 26%, rgba(255, 255, 255, 0.5), transparent 70%),
-    radial-gradient(ellipse 48px 16px at 70% 78%, rgba(255, 255, 255, 0.35), transparent 70%);
-  background-size: 160px 100%, 160px 100%, 240px 100%;
-  animation: project-clouds 16s linear infinite;
-  pointer-events: none;
-}
-
-.project__box.fx-clouds img {
-  animation: project-float 4.5s ease-in-out infinite;
-}
-
-@keyframes project-clouds {
-  from { background-position: 0 0, 0 0, 0 0; }
-  to   { background-position: 160px 0, 160px 0, 240px 0; }
-}
-
 .project__box:hover {
-  transform: translateY(-3px);
-  background: var(--p-card-hover);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+  border-color: var(--p-border-hover);
+}
+
+.project__box:hover img {
+  transform: scale(1.05);
 }
 
 .project__box:focus-visible {
@@ -245,17 +128,11 @@
   .project__box {
     transition: none;
   }
-  .project__box:hover,
+  .project__box img {
+    transition: none;
+  }
   .project__box:hover img {
     transform: none;
-  }
-  .project__box.fx-bubbles::before,
-  .project__box.fx-bubbles img,
-  .project__box.fx-shine::before,
-  .project__box.fx-shine img,
-  .project__box.fx-clouds::before,
-  .project__box.fx-clouds img {
-    animation: none;
   }
 }
 
@@ -351,7 +228,7 @@
   }
 }
 
-/* Franja de cabecera con la imagen sobre el fondo del proyecto. */
+/* Franja de cabecera con la imagen sobre una superficie neutra. */
 .project-dialog__image {
   display: block;
   width: 100%;
@@ -359,7 +236,7 @@
   padding: 20px;
   box-sizing: border-box;
   object-fit: contain;
-  background: var(--project-bg, var(--d-chip));
+  background: var(--d-chip);
   border-bottom: 1px solid var(--d-border);
   /* El diálogo no recorta su contenido: las esquinas van aquí. */
   border-radius: 15px 15px 0 0;

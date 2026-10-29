@@ -46,9 +46,6 @@
     img.loading = "lazy";
     img.decoding = "async";
     box.appendChild(img);
-    box.classList.add("has-image");
-    if (card.dataset.bg) box.style.setProperty("--project-bg", card.dataset.bg);
-    if (card.dataset.fx) box.classList.add("fx-" + card.dataset.fx);
   });
 
   etiquetarCasillas();
@@ -80,8 +77,6 @@
       if (d.image) elImage.src = d.image;
       else elImage.removeAttribute("src");
       elImage.hidden = !d.image;
-      if (d.bg) elImage.style.setProperty("--project-bg", d.bg);
-      else elImage.style.removeProperty("--project-bg");
     }
 
     const tags = (d.tags || "")
